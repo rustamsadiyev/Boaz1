@@ -30,6 +30,7 @@ export function useInfiniteGet<T = unknown>(
   fetchNextPage: () => void;
   hasNextPage?: boolean;
   isFetchingNextPage: boolean;
+  isLoading: boolean;
 } {
   const [downloadProgress, setDownloadProgress] = useState(0);
   const { ref, inView } = useInView();
@@ -84,5 +85,6 @@ export function useInfiniteGet<T = unknown>(
     fetchNextPage: query.fetchNextPage,
     hasNextPage: query.hasNextPage,
     isFetchingNextPage: query.isFetchingNextPage,
+    isLoading: query.isLoading,
   };
 }

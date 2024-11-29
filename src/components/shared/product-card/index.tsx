@@ -7,34 +7,60 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { useUser } from "@/constants/useUser";
+import { useGet } from "@/hooks/useGet";
+import { useRequest } from "@/hooks/useRequest";
 import { useStore } from "@/hooks/useStore";
 import { formatMoney } from "@/lib/format-money";
 import { cn } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
 import { Heart, ShoppingCart } from "lucide-react";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { toast } from "sonner";
 
 export default function ProductCard({ p }: { p: Product }) {
-  const likeds = useStore<Product[]>("likeds");
   const baskets = useStore<Product[]>("baskets");
+  const { username } = useUser();
+  const queryClient = useQueryClient();
+  const { data: likeds } = useGet<Product[]>("user/favourite/");
+
+  const { post, isPending, remove } = useRequest();
 
   const plugin = useRef(Autoplay({ delay: 1000, playOnInit: false }));
   const fade = useRef(Fade());
 
-  const isLiked = likeds.store?.some((l) => l.id === p.id);
-  const isInBasket = baskets.store?.some((b) => b.id === p.id);
+  const isLiked = useMemo(() => {
+    return likeds?.some((l) => l.id === p.id);
+  }, [likeds]);
+  const isInBasket = useMemo(() => {
+    return baskets.store?.some((b) => b.id === p.id);
+  }, [baskets]);
 
   const toggleLiked = () => {
-    likeds.setStore(
-      isLiked
-        ? likeds.store?.filter((l) => l.id !== p.id) || []
-        : [...(likeds.store || []), p]
-    );
-    isLiked
-      ? toast.success(p.name + " sevimlilarga qo'shildi")
-      : toast.success(p.name + " sevimlilardan o'chirildi");
+    if (isLiked) {
+      toast.promise(remove("user/favourite/", { product_id: p.id }), {
+        loading: "Sevimlilardan olib tashlanmoqda...",
+        success: () => {
+          queryClient.setQueryData(["user/favourite/"], (oldData: Product[]) =>
+            oldData.filter((l) => l.id !== p.id)
+          );
+          return p.name + " sevimlilardan olib tashlandi";
+        },
+      });
+    } else {
+      toast.promise(post("user/favourite/", { product_id: p.id }), {
+        loading: "Sevimlilarga qo'shilmoqda...",
+        success: () => {
+          queryClient.setQueryData(
+            ["user/favourite/"],
+            (oldData: Product[]) => [...(oldData || []), p]
+          );
+          return p.name + " sevimlilarga qo'shildi";
+        },
+      });
+    }
   };
 
   const toggleBasket = () => {
@@ -89,19 +115,22 @@ export default function ProductCard({ p }: { p: Product }) {
               </p>
             </div>
             <div className="flex">
-              <Button
-                icon={
-                  <Heart
-                    className={cn(
-                      "text-destructive w-4 sm:w-[18px]",
-                      isLiked && "fill-destructive"
-                    )}
-                  />
-                }
-                variant="ghost"
-                className="w-7 h-7 sm:w-10 sm:h-10"
-                onClick={toggleLiked}
-              />
+              {!!username && (
+                <Button
+                  icon={
+                    <Heart
+                      className={cn(
+                        "text-destructive w-4 sm:w-[18px]",
+                        isLiked && "fill-destructive"
+                      )}
+                    />
+                  }
+                  variant="ghost"
+                  className="w-7 h-7 sm:w-10 sm:h-10"
+                  disabled={isPending}
+                  onClick={toggleLiked}
+                />
+              )}
               <div className="w-max h-max relative">
                 <Button
                   icon={<ShoppingCart className="w-4 sm:w-[18px]" />}

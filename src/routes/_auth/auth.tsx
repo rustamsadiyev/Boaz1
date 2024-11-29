@@ -68,9 +68,9 @@ function AuthComponent() {
   }
 
   return (
-    <div className="flex h-screen items-center justify-center px-4">
+    <div className="flex h-[88vh] items-center justify-center px-4">
       <ParamAnimatedTabs
-        wrapperClassName="w-full max-w-sm h-[452px]"
+        wrapperClassName="w-full max-w-sm h-[530px]"
         onValueChange={() => form.reset()}
         options={[
           {
@@ -118,6 +118,11 @@ function AuthComponent() {
                     onSubmit={form.handleSubmit(onSubmit)}
                     className=" space-y-4"
                   >
+                    <FormInput
+                      methods={form}
+                      name="full_name"
+                      label="To'liq ismi"
+                    />
                     <FormInput name="username" label="Login" methods={form} />
                     <FormInput
                       name="password"
@@ -157,6 +162,9 @@ const FormSchema = z.object({
 
 const FormSchema2 = z
   .object({
+    full_name: z
+      .string({ message: "Ismingizni kiriting" })
+      .min(1, "Ismingizni kiriting"),
     username: z
       .string({ message: "Loginingizni kiriting" })
       .min(1, "Loginingizni kiriting"),

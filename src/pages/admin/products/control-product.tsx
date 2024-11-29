@@ -121,16 +121,18 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="w-full max-w-3xl pb-6">
+      <DialogContent className="w-full max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="text-left">Yangi kontakt</DialogTitle>
+          <DialogTitle className="text-left">
+            {current?.id ? current?.name + " ni tahrirlash" : "Yangi maxsulot"}
+          </DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4 max-h-[80vh] overflow-y-auto px-0.5"
         >
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 gap-4">
             <FormInput methods={form} name="name" label="Nomi" hideError />
             <FormNumberInput
               methods={form}

@@ -28,7 +28,7 @@ export default function AdminProductCard({
   const fade = useRef(Fade());
 
   const confirm = useConfirm();
-  const { remove } = useRequest();
+  const { remove, isPending } = useRequest();
   const queryClient = useQueryClient();
 
   async function deleteProduct() {
@@ -111,6 +111,7 @@ export default function AdminProductCard({
                 icon={<Trash2 className="w-4 sm:w-[18px]" />}
                 variant="ghost"
                 className="!text-destructive w-7 h-7 sm:w-10 sm:h-10"
+                disabled={isPending}
                 onClick={deleteProduct}
               />
               <Button
