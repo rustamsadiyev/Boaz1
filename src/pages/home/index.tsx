@@ -11,7 +11,7 @@ export default function Home() {
     "product/",
     search
   );
-
+  
   const filtered = useFilter<Product>(data);
 
   return (

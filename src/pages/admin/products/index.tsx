@@ -11,7 +11,7 @@ import Loading from "@/layouts/loading";
 export default function Products() {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState<Product>();
-
+  
   const { data, ref, isFetchingNextPage, isLoading } =
     useInfiniteGet<Product>("product/");
   const filtered = useFilter<Product>(data);

@@ -16,6 +16,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as MainImport } from './routes/_main'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as MainIndexImport } from './routes/_main/index'
+import { Route as MainLikedsImport } from './routes/_main/likeds'
+import { Route as MainBasketImport } from './routes/_main/basket'
 import { Route as AuthAuthImport } from './routes/_auth/auth'
 
 // Create Virtual Routes
@@ -48,6 +50,18 @@ const AdminProductsLazyRoute = AdminProductsLazyImport.update({
   import('./routes/_admin/products.lazy').then((d) => d.Route),
 )
 
+const MainLikedsRoute = MainLikedsImport.update({
+  id: '/likeds',
+  path: '/likeds',
+  getParentRoute: () => MainRoute,
+} as any)
+
+const MainBasketRoute = MainBasketImport.update({
+  id: '/basket',
+  path: '/basket',
+  getParentRoute: () => MainRoute,
+} as any)
+
 const AuthAuthRoute = AuthAuthImport.update({
   id: '/auth',
   path: '/auth',
@@ -79,6 +93,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthImport
       parentRoute: typeof AuthImport
     }
+    '/_main/basket': {
+      id: '/_main/basket'
+      path: '/basket'
+      fullPath: '/basket'
+      preLoaderRoute: typeof MainBasketImport
+      parentRoute: typeof MainImport
+    }
+    '/_main/likeds': {
+      id: '/_main/likeds'
+      path: '/likeds'
+      fullPath: '/likeds'
+      preLoaderRoute: typeof MainLikedsImport
+      parentRoute: typeof MainImport
+    }
     '/_admin/products': {
       id: '/_admin/products'
       path: '/products'
@@ -109,10 +137,14 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface MainRouteChildren {
+  MainBasketRoute: typeof MainBasketRoute
+  MainLikedsRoute: typeof MainLikedsRoute
   MainIndexRoute: typeof MainIndexRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
+  MainBasketRoute: MainBasketRoute,
+  MainLikedsRoute: MainLikedsRoute,
   MainIndexRoute: MainIndexRoute,
 }
 
@@ -121,6 +153,8 @@ const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 export interface FileRoutesByFullPath {
   '': typeof MainRouteWithChildren
   '/auth': typeof AuthAuthRoute
+  '/basket': typeof MainBasketRoute
+  '/likeds': typeof MainLikedsRoute
   '/products': typeof AdminProductsLazyRoute
   '/': typeof MainIndexRoute
 }
@@ -128,6 +162,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof AuthRouteWithChildren
   '/auth': typeof AuthAuthRoute
+  '/basket': typeof MainBasketRoute
+  '/likeds': typeof MainLikedsRoute
   '/products': typeof AdminProductsLazyRoute
   '/': typeof MainIndexRoute
 }
@@ -137,20 +173,24 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_main': typeof MainRouteWithChildren
   '/_auth/auth': typeof AuthAuthRoute
+  '/_main/basket': typeof MainBasketRoute
+  '/_main/likeds': typeof MainLikedsRoute
   '/_admin/products': typeof AdminProductsLazyRoute
   '/_main/': typeof MainIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/auth' | '/products' | '/'
+  fullPaths: '' | '/auth' | '/basket' | '/likeds' | '/products' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/auth' | '/products' | '/'
+  to: '' | '/auth' | '/basket' | '/likeds' | '/products' | '/'
   id:
     | '__root__'
     | '/_auth'
     | '/_main'
     | '/_auth/auth'
+    | '/_main/basket'
+    | '/_main/likeds'
     | '/_admin/products'
     | '/_main/'
   fileRoutesById: FileRoutesById
@@ -192,12 +232,22 @@ export const routeTree = rootRoute
     "/_main": {
       "filePath": "_main.tsx",
       "children": [
+        "/_main/basket",
+        "/_main/likeds",
         "/_main/"
       ]
     },
     "/_auth/auth": {
       "filePath": "_auth/auth.tsx",
       "parent": "/_auth"
+    },
+    "/_main/basket": {
+      "filePath": "_main/basket.tsx",
+      "parent": "/_main"
+    },
+    "/_main/likeds": {
+      "filePath": "_main/likeds.tsx",
+      "parent": "/_main"
     },
     "/_admin/products": {
       "filePath": "_admin/products.lazy.tsx"

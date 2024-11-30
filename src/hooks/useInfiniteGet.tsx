@@ -73,7 +73,7 @@ export function useInfiniteGet<T = unknown>(
     return (
       (query.data as any)?.pages.flatMap(
         (page: PaginatedResponse<T>) => page.results
-      ) || []
+      )?.filter((f:T) => !!f) || []
     );
   }, [query.data]);
 

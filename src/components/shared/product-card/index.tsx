@@ -20,18 +20,18 @@ import { Heart, ShoppingCart } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { toast } from "sonner";
 
-export default function ProductCard({ p }: { p: Product }) {
+export default function ProductCard({ p, isLikeds }: { p: Product, isLikeds?: boolean }) {
   const baskets = useStore<Product[]>("baskets");
   const { username } = useUser();
   const queryClient = useQueryClient();
-  const { data: likeds } = useGet<Product[]>("user/favourite/");
+  const { data: likeds } = useGet<Product[]>("user/favourite/",undefined,{enabled:!!localStorage.getItem("token")});
 
   const { post, isPending, remove } = useRequest();
 
   const plugin = useRef(Autoplay({ delay: 1000, playOnInit: false }));
   const fade = useRef(Fade());
 
-  const isLiked = useMemo(() => {
+  const isLiked =isLikeds|| useMemo(() => {
     return likeds?.some((l) => l.id === p.id);
   }, [likeds]);
   const isInBasket = useMemo(() => {
@@ -121,7 +121,7 @@ export default function ProductCard({ p }: { p: Product }) {
                     <Heart
                       className={cn(
                         "text-destructive w-4 sm:w-[18px]",
-                        isLiked && "fill-destructive"
+                        isLiked && "fill-destructive",
                       )}
                     />
                   }

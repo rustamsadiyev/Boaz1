@@ -14,6 +14,13 @@ export function useStore<T = unknown>(key: string) {
       const data = localStorage.getItem(key);
       return data ? JSON.parse(data) : null;
     },
+    staleTime:Infinity,
+    gcTime:Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus:false,
+    refetchInterval: false,
+    refetchOnReconnect:false,
+    refetchIntervalInBackground:false
   });
 
   return { store, setStore };
