@@ -5,9 +5,9 @@ import { useGet } from "@/hooks/useGet";
 
 export default function Footer() {
     const {store:baskets}=useStore<Product[]>("baskets");
-    const {data:likeds}=useGet<Product[]>("user/favourite/",undefined,{enabled:!!localStorage.getItem("token")});
+    const {data:likeds}=useGet<{product_ids: number[]}>("user/favourite/?only_ids=true",undefined,{enabled:!!localStorage.getItem("token")});
   return (
-    <footer className="sm:hidden sticky bottom-0 backdrop-blur bg-background/60 px-2 sm:px-4">
+    <footer className="sm:hidden sticky bottom-0 backdrop-blur bg-accent/60 px-2 sm:px-4">
         <AnimatedFooterTab options={[
             {
                 name:'Bosh sahifa',
@@ -23,7 +23,7 @@ export default function Footer() {
                 name:"Tanlanganlar",
                 id:"/likeds",
                 icon:<Heart width={25}/>,
-                badge:likeds?.length
+                badge:likeds?.product_ids?.length
             },
             {
                 name:"Savat",

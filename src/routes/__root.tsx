@@ -9,9 +9,9 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <div className="2xl:p-0 2xl:container mx-auto min-h-screen relative">
+    <div className="2xl:p-0 xl:container mx-auto min-h-screen relative overflow-x-visible pb-4">
       <Header />
-      <main className="pt-4 px-2 sm:px-4 h-full overflow-y-auto">
+      <main className="pt-4 px-2 sm:px-4 h-full overflow-y-auto min-h-screen">
         <Outlet />
       </main>
       <Footer/>

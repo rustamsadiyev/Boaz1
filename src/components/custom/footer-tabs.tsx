@@ -19,7 +19,7 @@ export default function AnimatedFooterTab({
     value || options?.[0]?.[returnValue]
   );
   const [indicatorStyle, setIndicatorStyle] = useState({ width: 0, left: 0 });
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const updateIndicator = () => {
     if (tabRef.current) {
@@ -53,8 +53,7 @@ export default function AnimatedFooterTab({
       ref={tabRef}
       onValueChange={(value) => {
         setCurrentTab(value);
-        navigate({to:`${value}`})
-
+        navigate({ to: `${value}` });
       }}
     >
       <div className="flex items-center w-full overflow-auto">
@@ -65,22 +64,24 @@ export default function AnimatedFooterTab({
           )}
         >
           {options.map((t, i) => (
-            <Link to={t.id.toString()}>
-            <TabsTrigger
-              key={i}
-              data-index={t?.[returnValue]}
-              value={t.id.toString()}
-              className={cn(
-                "!bg-transparent relative !text-primary duration-300 z-20 ease-out -ml-1 flex flex-col !shadow-none !p-0 py-2 !px-2",
-                fullWidth && "ml-0"
-              )}
-            >
-              {t.icon}
-              <span className="text-[10px] -mt-1">
-              {t.name}
-              </span>
-             {!!t.badge&& <Badge className="absolute -top-0.5 right-0 px-1 h-4 text-[10px]">{t.badge}</Badge>}
-            </TabsTrigger>
+            <Link to={t.id.toString()} key={i}>
+              <TabsTrigger
+                key={i}
+                data-index={t?.[returnValue]}
+                value={t.id.toString()}
+                className={cn(
+                  "!bg-transparent relative !text-primary duration-300 z-20 ease-out -ml-1 flex flex-col !shadow-none !p-0 py-2 !px-2",
+                  fullWidth && "ml-0"
+                )}
+              >
+                {t.icon}
+                <span className="text-[10px] -mt-1">{t.name}</span>
+                {!!t.badge && (
+                  <Badge className="absolute -top-0.5 right-0 px-1 h-4 text-[10px]">
+                    {t.badge}
+                  </Badge>
+                )}
+              </TabsTrigger>
             </Link>
           ))}
           <div

@@ -19,6 +19,7 @@ import { Route as MainIndexImport } from './routes/_main/index'
 import { Route as MainLikedsImport } from './routes/_main/likeds'
 import { Route as MainBasketImport } from './routes/_main/basket'
 import { Route as AuthAuthImport } from './routes/_auth/auth'
+import { Route as MainCategoriesIndexImport } from './routes/_main/categories/index'
 
 // Create Virtual Routes
 
@@ -66,6 +67,12 @@ const AuthAuthRoute = AuthAuthImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => AuthRoute,
+} as any)
+
+const MainCategoriesIndexRoute = MainCategoriesIndexImport.update({
+  id: '/categories/',
+  path: '/categories/',
+  getParentRoute: () => MainRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -121,6 +128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainIndexImport
       parentRoute: typeof MainImport
     }
+    '/_main/categories/': {
+      id: '/_main/categories/'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof MainCategoriesIndexImport
+      parentRoute: typeof MainImport
+    }
   }
 }
 
@@ -140,12 +154,14 @@ interface MainRouteChildren {
   MainBasketRoute: typeof MainBasketRoute
   MainLikedsRoute: typeof MainLikedsRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainCategoriesIndexRoute: typeof MainCategoriesIndexRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
   MainBasketRoute: MainBasketRoute,
   MainLikedsRoute: MainLikedsRoute,
   MainIndexRoute: MainIndexRoute,
+  MainCategoriesIndexRoute: MainCategoriesIndexRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
@@ -157,6 +173,7 @@ export interface FileRoutesByFullPath {
   '/likeds': typeof MainLikedsRoute
   '/products': typeof AdminProductsLazyRoute
   '/': typeof MainIndexRoute
+  '/categories': typeof MainCategoriesIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -166,6 +183,7 @@ export interface FileRoutesByTo {
   '/likeds': typeof MainLikedsRoute
   '/products': typeof AdminProductsLazyRoute
   '/': typeof MainIndexRoute
+  '/categories': typeof MainCategoriesIndexRoute
 }
 
 export interface FileRoutesById {
@@ -177,13 +195,21 @@ export interface FileRoutesById {
   '/_main/likeds': typeof MainLikedsRoute
   '/_admin/products': typeof AdminProductsLazyRoute
   '/_main/': typeof MainIndexRoute
+  '/_main/categories/': typeof MainCategoriesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/auth' | '/basket' | '/likeds' | '/products' | '/'
+  fullPaths:
+    | ''
+    | '/auth'
+    | '/basket'
+    | '/likeds'
+    | '/products'
+    | '/'
+    | '/categories'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/auth' | '/basket' | '/likeds' | '/products' | '/'
+  to: '' | '/auth' | '/basket' | '/likeds' | '/products' | '/' | '/categories'
   id:
     | '__root__'
     | '/_auth'
@@ -193,6 +219,7 @@ export interface FileRouteTypes {
     | '/_main/likeds'
     | '/_admin/products'
     | '/_main/'
+    | '/_main/categories/'
   fileRoutesById: FileRoutesById
 }
 
@@ -234,7 +261,8 @@ export const routeTree = rootRoute
       "children": [
         "/_main/basket",
         "/_main/likeds",
-        "/_main/"
+        "/_main/",
+        "/_main/categories/"
       ]
     },
     "/_auth/auth": {
@@ -254,6 +282,10 @@ export const routeTree = rootRoute
     },
     "/_main/": {
       "filePath": "_main/index.tsx",
+      "parent": "/_main"
+    },
+    "/_main/categories/": {
+      "filePath": "_main/categories/index.tsx",
       "parent": "/_main"
     }
   }

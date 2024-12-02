@@ -174,7 +174,7 @@ export default function ParamPagination({
   );
 }
 
-type PaginationProps = {
+export type PaginationProps = {
   totalPages?: number | undefined;
   paramName?: string;
   disabled?: boolean;

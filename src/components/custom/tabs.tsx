@@ -56,8 +56,8 @@ export default function AnimatedTabs({
       <div className="flex items-center w-full overflow-auto">
         <TabsList
           className={cn(
-            "relative w-full flex items-center justify-between overflow-hidden",
-            fullWidth && "grid grid-cols-2"
+            "relative w-max flex items-center justify-between overflow-hidden",
+            fullWidth && "w-full grid grid-cols-2"
           )}
         >
           {options.map((t, i) => (
@@ -66,8 +66,7 @@ export default function AnimatedTabs({
               data-index={t?.[returnValue]}
               value={t.id.toString()}
               className={cn(
-                "data-[state=active]:bg-transparent data-[state=active]:text-background duration-300 z-10 ease-out -ml-1",
-                fullWidth && "ml-0"
+                "delay-100 data-[state=active]:bg-transparent data-[state=active]:text-background duration-300 z-10 ease-out"
               )}
             >
               {t.name}
@@ -78,6 +77,7 @@ export default function AnimatedTabs({
             style={{
               width: `${indicatorStyle.width}px`,
               transform: `translateX(${indicatorStyle.left}px)`,
+              marginLeft: fullWidth ? "0" : "-4px",
             }}
           />
         </TabsList>

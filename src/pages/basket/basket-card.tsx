@@ -62,41 +62,47 @@ export default function BasketCard({ product }: { product: Product }) {
                     width={120}
                     onMouseEnter={() => plugin.current.play()}
                     onMouseLeave={() => plugin.current.stop()}
-                    className="w-max rounded-md"
+                    className="rounded-md  sm:w-max"
                   />
                 </SeeInView>
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
-        <h3 className="font-medium">{product.name}</h3>
-        <p className="text-muted-foreground">
-          {formatMoney(product.price, "", true)}
-        </p>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handleQuantity(product.id, "decrease")}
-          >
-            <MinusIcon width={18} />
-          </Button>
-          <span className="w-10 text-center">{product.count || 1}</span>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handleQuantity(product.id, "increase")}
-          >
-            <PlusIcon width={18} />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="!text-destructive"
-            onClick={() => handleRemove(product.id)}
-          >
-            <Trash2 width={18} />
-          </Button>
+        <div className="flex items-end sm:items-center justify-between w-full gap-x-4 gap-y-2 flex-col sm:flex-row flex-wrap">
+          <h3 className="text-sm sm:text-base font-medium">{product.name}</h3>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            {formatMoney(product.price, "", true)}
+          </p>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => handleQuantity(product.id, "decrease")}
+              className="h-7 w-7 sm:w-10 sm:h-10"
+            >
+              <MinusIcon width={18} />
+            </Button>
+            <span className="w-5 sm:w-10 text-center text-sm sm:text-base">
+              {product.count || 1}
+            </span>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => handleQuantity(product.id, "increase")}
+              className="h-7 w-7 sm:w-10 sm:h-10"
+            >
+              <PlusIcon width={18} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => handleRemove(product.id)}
+              className="!text-destructive h-7 w-7 sm:w-10 sm:h-10"
+            >
+              <Trash2 width={18} />
+            </Button>
+          </div>
         </div>
       </div>
     </Card>

@@ -33,20 +33,15 @@ export default function Image({
           "relative z-10 object-cover w-full h-full",
           contain && "!object-contain",
           isZoomed &&
-            "hover:scale-125 duration-300 [transition-timing-function:cubic-bezier(0.33,1,0.68,1)]",
-          loading
-            ? "scale-110 blur-2xl grayscale-0"
-            : "scale-100 blur-0 grayscale-0",
-          isZoomed &&
             "hover:scale-125 duration-300 [transition-timing-function:cubic-bezier(0.33,1,0.68,1)]"
         )}
       />
-      <Skeleton
+    {loading&&  <Skeleton
         className={cn(
           imgProps.className,
           "w-full h-full absolute top-0 left-0 rounded-none z-0"
         )}
-      />
+      />}
     </div>
   );
 }

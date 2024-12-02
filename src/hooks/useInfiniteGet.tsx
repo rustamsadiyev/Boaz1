@@ -1,4 +1,5 @@
 import {
+  keepPreviousData,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
 } from "@tanstack/react-query";
@@ -41,7 +42,7 @@ export function useInfiniteGet<T = unknown>(
     queryKey: lastUrl,
     queryFn: async ({ pageParam = "" }) => {
       const response = await http.get(pageParam ? pageParam?.toString() : url, {
-        params,
+        params: {...params, q: undefined, page_tabs: undefined},
         onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
           if (progressEvent.total) {
             const percentCompleted = Math.round(
@@ -61,6 +62,7 @@ export function useInfiniteGet<T = unknown>(
       return firstPage.previous;
     },
     ...options,
+    placeholderData:keepPreviousData
   });
 
   useEffect(() => {

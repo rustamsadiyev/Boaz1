@@ -13,49 +13,61 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { useConfirm } from "@/hooks/useConfirm";
+import { CategoryDrawer } from "@/pages/category/category-drawer";
 
 export default function Header() {
   const { store } = useStore<{ name: string }[]>("baskets");
+  const confirm = useConfirm();
   const { username, is_admin } = useUser();
-  const {data:likeds}=useGet<Product[]>("user/favourite/",undefined,{enabled:!!localStorage.getItem("token")});
+  const { data: likeds } = useGet<{ product_ids: number[] }>(
+    "user/favourite/?only_ids=true",
+    undefined,
+    { enabled: !!localStorage.getItem("token") }
+  );
   const { data: categories } = useGet<Category[]>("category/");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const pathname = useLocation().pathname;
 
-  function logOut() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refresh");
-    queryClient.setQueryData(["user/"], null);
-    navigate({ to: "/" });
+  async function logOut() {
+    const isConfirmed = await confirm({
+      title: "Tizimdan chiqmoqchimisiz?",
+    });
+    if (isConfirmed) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("refresh");
+      queryClient.setQueryData(["user/"], null);
+      navigate({ to: "/" });
+    }
   }
 
   return (
-    <header className="flex flex-col pb-2 sticky top-0 left-0 right-0 z-10 backdrop-blur bg-background/60 px-2 sm:px-4">
-      <div className="flex items-center justify-between py-2">
+    <header className="flex flex-col sticky top-0 left-0 right-0 z-10 backdrop-blur bg-accent/60 px-2 sm:px-4 z-40">
+      <div className="flex items-center justify-between py-1.5 sm:py-3">
         <Link to="/">
           <h2 className="hidden sm:inline text-xl md:text-2xl font-semibold">
             Boaz
           </h2>
         </Link>
-        <div className="flex items-center justify-between gap-4 w-full sm:w-auto">
+        <div className="flex items-center justify-between gap-3 w-full sm:w-auto">
           {pathname !== "/auth" && <ParamInput className="sm:w-max" />}
           <div className="flex">
-          <TooltipProvider>
+            <TooltipProvider>
               <Tooltip>
-              { !!username&& <TooltipTrigger asChild>
-                  <Link to="/likeds" className="relative hidden sm:inline">
-                    <Button
-                      icon={<Heart width={18} />}
-                      variant="ghost"
-                    />
-                    {!!likeds?.length && likeds?.length! >= 1 && (
-                      <Badge className="absolute -top-2 -right-2 z-10">
-                        {likeds?.length}
-                      </Badge>
-                    )}
-                  </Link>
-                </TooltipTrigger>}
+                {!!username && (
+                  <TooltipTrigger asChild>
+                    <Link to="/likeds" className="relative hidden sm:inline">
+                      <Button icon={<Heart width={18} />} variant="ghost" />
+                      {!!likeds?.product_ids?.length &&
+                        likeds?.product_ids?.length! >= 1 && (
+                          <Badge className="absolute -top-2 -right-2 z-10">
+                            {likeds?.product_ids?.length}
+                          </Badge>
+                        )}
+                    </Link>
+                  </TooltipTrigger>
+                )}
                 <TooltipContent>
                   <p>Tanlanganlar</p>
                 </TooltipContent>
@@ -96,6 +108,16 @@ export default function Header() {
                 </Tooltip>
               </TooltipProvider>
             )}
+            {pathname === "/categories" &&  <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <CategoryDrawer/>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Admin</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>}
             {username ? (
               <TooltipProvider>
                 <Tooltip>
@@ -128,11 +150,11 @@ export default function Header() {
           </div>
         </div>
       </div>
-      {!["/auth", "/products"].includes(pathname) && (
-        <div className="flex w-full overflow-x-auto gap-4">
+      {!["/auth", "/products", "/categories"].find((p) => pathname.includes(p)) && (
+        <div className="hidden md:flex w-full overflow-x-auto gap-4 pb-2">
           {categories?.map((c) => (
             <Link
-              to="/"
+              to={`/categories/?category=${c.id}`}
               className="text-primary/80 hover:text-primary"
               key={c.id}
             >

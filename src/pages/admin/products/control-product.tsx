@@ -81,7 +81,7 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    values: current as any,
+    values: {...current, image1: 'http://url.com', image2: 'http://url.com', image3: 'http://url.com', image4: 'http://url.com'} as any,
     disabled: isPending,
   });
 

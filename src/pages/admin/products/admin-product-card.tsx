@@ -80,6 +80,7 @@ export default function AdminProductCard({
                   src={m}
                   alt="product image"
                   height={200}
+                  contain
                   width={"100%"}
                   onMouseEnter={() => plugin.current.play()}
                   onMouseLeave={() => plugin.current.stop()}
@@ -89,7 +90,7 @@ export default function AdminProductCard({
           </CarouselContent>
         </Carousel>
         <div className="p-3">
-          <h2 className="text-xs sm:text-base font-medium">{p.name}</h2>
+          <h2 className="text-sm sm:text-base font-medium">{p.name}</h2>
           <p className="text-xs sm:text-sm text-muted-foreground">
             {p.description}
           </p>

@@ -12,7 +12,7 @@ export default function Likeds() {
       <Loading loading={isLoading}>
         <div className="grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">
           {filtered?.map((d, i: number) => (
-            <ProductCard p={d} key={i} isLikeds />
+            <ProductCard p={d} key={i} isLikeds is_authenticated />
           ))}
         </div>
       </Loading>

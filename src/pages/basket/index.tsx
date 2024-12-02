@@ -28,15 +28,13 @@ export default function Basket() {
       </div>
 
       {!!store?.length && (
-        <div className=" bg-background border-t p-4">
-          <div className="container flex items-center justify-between">
+        <div className=" border-t pt-2 sm:pt-4 flex sm:items-center justify-between gap-x-4 gap-y-2 flex-col sm:flex-row">
             <div className="text-lg font-medium">
               Total: ${formatMoney(totalPrice.toFixed(2))}
             </div>
             <Button onClick={handleSell} size="lg">
               Buyurtmani amalga oshirish
             </Button>
-          </div>
         </div>
       )}
     </div>

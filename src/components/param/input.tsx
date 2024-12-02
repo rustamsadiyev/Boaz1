@@ -26,7 +26,7 @@ export default function ParamInput({
           search: clearOthers
             ? ({
                 q: newSearchTerm,
-                search: params.search,
+                name: params.name,
               } as any)
             : {
                 ...params,
@@ -34,7 +34,7 @@ export default function ParamInput({
               },
         });
       } else {
-        navigate({ search: { ...params, q: undefined, search: undefined } });
+        navigate({ search: { ...params, q: undefined, name: undefined } });
       }
     }, 300);
   };
@@ -47,31 +47,31 @@ export default function ParamInput({
           search: clearOthers
             ? ({
                 q: searchValue,
-                search: searchValue,
+                name: searchValue,
               } as any)
             : {
                 ...params,
                 q: searchValue,
-                search: searchValue,
+                name: searchValue,
               },
         });
       } else {
-        navigate({ search: { ...params, q: undefined, search: undefined } });
+        navigate({ search: { ...params, q: undefined, name: undefined } });
       }
     }
   };
 
   useEffect(() => {
-    if (params.search || params.q) {
+    if (params.name || params.q) {
       if (inputRef.current) {
-        inputRef.current.value = params.q || params.search || "";
+        inputRef.current.value = params.q || params.name || "";
       }
     } else {
       if (inputRef.current) {
         inputRef.current.value = "";
       }
     }
-  }, [params.search, params.q, inputRef.current]);
+  }, [params.name, params.q, inputRef.current]);
 
   return (
     <>

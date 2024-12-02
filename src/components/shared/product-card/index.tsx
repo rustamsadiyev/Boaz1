@@ -7,7 +7,6 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { useUser } from "@/constants/useUser";
 import { useGet } from "@/hooks/useGet";
 import { useRequest } from "@/hooks/useRequest";
 import { useStore } from "@/hooks/useStore";
@@ -20,11 +19,10 @@ import { Heart, ShoppingCart } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { toast } from "sonner";
 
-export default function ProductCard({ p, isLikeds }: { p: Product, isLikeds?: boolean }) {
+export default function ProductCard({ p, isLikeds,is_authenticated }: { p: Product, isLikeds?: boolean, is_authenticated:boolean }) {
   const baskets = useStore<Product[]>("baskets");
-  const { username } = useUser();
   const queryClient = useQueryClient();
-  const { data: likeds } = useGet<Product[]>("user/favourite/",undefined,{enabled:!!localStorage.getItem("token")});
+  const { data: likeds } = useGet<{product_ids: number[]}>("user/favourite/?only_ids=true",undefined,{enabled:!!localStorage.getItem("token")});
 
   const { post, isPending, remove } = useRequest();
 
@@ -32,7 +30,7 @@ export default function ProductCard({ p, isLikeds }: { p: Product, isLikeds?: bo
   const fade = useRef(Fade());
 
   const isLiked =isLikeds|| useMemo(() => {
-    return likeds?.some((l) => l.id === p.id);
+    return likeds?.product_ids?.some((l) => l === p.id);
   }, [likeds]);
   const isInBasket = useMemo(() => {
     return baskets.store?.some((b) => b.id === p.id);
@@ -46,6 +44,12 @@ export default function ProductCard({ p, isLikeds }: { p: Product, isLikeds?: bo
           queryClient.setQueryData(["user/favourite/"], (oldData: Product[]) =>
             oldData.filter((l) => l.id !== p.id)
           );
+          queryClient.setQueryData(
+            ["user/favourite/?only_ids=true"],
+            (oldData: { product_ids: number[] }) =>({
+              product_ids: oldData.product_ids.filter((l) => l !== p.id)
+            })
+          );
           return p.name + " sevimlilardan olib tashlandi";
         },
       });
@@ -56,6 +60,12 @@ export default function ProductCard({ p, isLikeds }: { p: Product, isLikeds?: bo
           queryClient.setQueryData(
             ["user/favourite/"],
             (oldData: Product[]) => [...(oldData || []), p]
+          );
+          queryClient.setQueryData(
+            ["user/favourite/?only_ids=true"],
+            (oldData: { product_ids: number[] }) => ({
+              product_ids: [...(oldData?.product_ids || []), p.id],
+            })
           );
           return p.name + " sevimlilarga qo'shildi";
         },
@@ -75,18 +85,20 @@ export default function ProductCard({ p, isLikeds }: { p: Product, isLikeds?: bo
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden" key={p.id}>
       <CardContent className="p-0">
         <Carousel
           className="w-full max-w-full"
           plugins={[plugin.current, fade.current]}
         >
           <CarouselContent>
-            {[p.image1, p.image2, p.image3, p.image4]?.map((m) => (
-              <CarouselItem key={m} className="relative">
+            {[p.image1, p.image2, p.image3, p.image4]?.map((m,i) => (
+              <CarouselItem key={i} className="relative">
                 <CustomImage
+                  key={i}
                   src={m}
                   alt="product image"
+                  contain
                   height={200}
                   width={"100%"}
                   onMouseEnter={() => plugin.current.play()}
@@ -96,8 +108,8 @@ export default function ProductCard({ p, isLikeds }: { p: Product, isLikeds?: bo
             ))}
           </CarouselContent>
         </Carousel>
-        <div className="p-3">
-          <h2 className="text-xs sm:text-base font-medium">{p.name}</h2>
+        <div className="p-2 sm:p-3">
+          <h2 className="text-sm sm:text-base">{p.name}</h2>
           <p className="text-xs sm:text-sm text-muted-foreground">
             {p.description}
           </p>
@@ -105,7 +117,7 @@ export default function ProductCard({ p, isLikeds }: { p: Product, isLikeds?: bo
             Omborda:{" "}
             <span className="text-foreground font-medium">{p.stock} ta</span>
           </p>
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center justify-between pt-2 mt-auto">
             <div>
               <p className="text-xs line-through text-muted-foreground">
                 {formatMoney(p.price, "", true)}
@@ -115,7 +127,7 @@ export default function ProductCard({ p, isLikeds }: { p: Product, isLikeds?: bo
               </p>
             </div>
             <div className="flex">
-              {!!username && (
+              {is_authenticated && (
                 <Button
                   icon={
                     <Heart
