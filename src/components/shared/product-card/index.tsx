@@ -24,12 +24,10 @@ export default function ProductCard({
   p,
   isLikeds,
   is_authenticated,
-  props
 }: {
   p: Product;
   isLikeds?: boolean;
   is_authenticated: boolean;
-  props?:any
 }) {
   const baskets = useStore<Product[]>("baskets");
   const queryClient = useQueryClient();
@@ -102,7 +100,7 @@ export default function ProductCard({
   };
 
   return (
-    <Card className="overflow-hidden relative group" key={p.id} {...props}>
+    <Card className="overflow-hidden relative group" key={p.id}>
       <CardContent className="p-0">
       {is_authenticated && (
                 <Button
