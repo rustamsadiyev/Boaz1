@@ -42,7 +42,7 @@ export function useInfiniteGet<T = unknown>(
     queryKey: lastUrl,
     queryFn: async ({ pageParam = "" }) => {
       const response = await http.get(pageParam ? pageParam?.toString() : url, {
-        params: {...params, q: undefined, page_tabs: undefined},
+        params: {...params, q: undefined, page_tabs: undefined,page_size:12},
         onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
           if (progressEvent.total) {
             const percentCompleted = Math.round(
@@ -62,7 +62,8 @@ export function useInfiniteGet<T = unknown>(
       return firstPage.previous;
     },
     ...options,
-    placeholderData:keepPreviousData
+    placeholderData:keepPreviousData,
+    experimental_prefetchInRender: true
   });
 
   useEffect(() => {

@@ -30,7 +30,7 @@ export default function Image({
         onLoad={() => setLoading(false)}
         className={cn(
           imgProps.className,
-          "relative z-10 object-cover w-full h-full",
+          "relative z-10 object-cover w-full h-full mix-blend-multiply",
           contain && "!object-contain",
           isZoomed &&
             "hover:scale-125 duration-300 [transition-timing-function:cubic-bezier(0.33,1,0.68,1)]"

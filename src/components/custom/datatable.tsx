@@ -140,7 +140,7 @@ export function DataTable({
                                         <TableHead
                                             key={index}
                                             className={cn(
-                                                "border border-b-2 px-2",
+                                                "border border-b-2",
                                                 rowSelection &&
                                                 index === 0 &&
                                                 "w-8",
@@ -209,7 +209,7 @@ export function DataTable({
                     <TableFooter></TableFooter>
                 </Table>
             </div>
-            {!viewAll && <div className="pt-4 mx-auto w-max">
+            {!viewAll && <div className="pt-4 mx-auto w-max pb-0.5">
                 {paginationProps?.totalPages ?
                     <ParamPagination
                         disabled={disabled || loading}

@@ -95,15 +95,15 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
         image4: typeof data.image4 === "string" ? undefined : data.image4,
       });
       toast.success("Muvaffaqiyatli tahrirlandi");
-      setOpen(false);
-      form.reset();
+      // setOpen(false);
+      // form.reset();
     } else {
       await post("product/", {
         ...data,
       });
       toast.success("Muvaffaqiyatli qo'shildi");
-      setOpen(false);
-      form.reset();
+      // setOpen(false);
+      // form.reset();
     }
 
     queryClient.invalidateQueries({
@@ -195,7 +195,7 @@ const FormSchema = z.object({
   discounted_price: z
     .string({ message: "Narxi juda kam" })
     .min(3, { message: "Narxi juda kam" })
-    .or(z.number().min(3)),
+    .or(z.number().min(3)).optional().nullable(),
   stock: z.string({ message: "" }).min(1).or(z.number().min(1)),
   image1: z.union([
     z.string().url({ message: "Valid URL kiriting" }),

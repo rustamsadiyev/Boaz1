@@ -16,14 +16,16 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as MainImport } from './routes/_main'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as MainIndexImport } from './routes/_main/index'
-import { Route as MainLikedsImport } from './routes/_main/likeds'
+import { Route as MainWarehouseImport } from './routes/_main/warehouse'
+import { Route as MainProfileImport } from './routes/_main/profile'
 import { Route as MainBasketImport } from './routes/_main/basket'
 import { Route as AuthAuthImport } from './routes/_auth/auth'
 import { Route as MainCategoriesIndexImport } from './routes/_main/categories/index'
+import { Route as MainProductsProductImport } from './routes/_main/products/$product'
 
 // Create Virtual Routes
 
-const AdminProductsLazyImport = createFileRoute('/_admin/products')()
+const AdminProductsLazyImport = createFileRoute('/admin/products')()
 
 // Create/Update Routes
 
@@ -44,16 +46,22 @@ const MainIndexRoute = MainIndexImport.update({
 } as any)
 
 const AdminProductsLazyRoute = AdminProductsLazyImport.update({
-  id: '/_admin/products',
-  path: '/products',
+  id: '/admin/products',
+  path: '/admin/products',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/_admin/products.lazy').then((d) => d.Route),
+  import('./routes/admin/products.lazy').then((d) => d.Route)
 )
 
-const MainLikedsRoute = MainLikedsImport.update({
-  id: '/likeds',
-  path: '/likeds',
+const MainWarehouseRoute = MainWarehouseImport.update({
+  id: '/warehouse',
+  path: '/warehouse',
+  getParentRoute: () => MainRoute,
+} as any)
+
+const MainProfileRoute = MainProfileImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => MainRoute,
 } as any)
 
@@ -72,6 +80,12 @@ const AuthAuthRoute = AuthAuthImport.update({
 const MainCategoriesIndexRoute = MainCategoriesIndexImport.update({
   id: '/categories/',
   path: '/categories/',
+  getParentRoute: () => MainRoute,
+} as any)
+
+const MainProductsProductRoute = MainProductsProductImport.update({
+  id: '/products/$product',
+  path: '/products/$product',
   getParentRoute: () => MainRoute,
 } as any)
 
@@ -107,17 +121,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainBasketImport
       parentRoute: typeof MainImport
     }
-    '/_main/likeds': {
-      id: '/_main/likeds'
-      path: '/likeds'
-      fullPath: '/likeds'
-      preLoaderRoute: typeof MainLikedsImport
+    '/_main/profile': {
+      id: '/_main/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof MainProfileImport
       parentRoute: typeof MainImport
     }
-    '/_admin/products': {
-      id: '/_admin/products'
-      path: '/products'
-      fullPath: '/products'
+    '/_main/warehouse': {
+      id: '/_main/warehouse'
+      path: '/warehouse'
+      fullPath: '/warehouse'
+      preLoaderRoute: typeof MainWarehouseImport
+      parentRoute: typeof MainImport
+    }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/admin/products'
+      fullPath: '/admin/products'
       preLoaderRoute: typeof AdminProductsLazyImport
       parentRoute: typeof rootRoute
     }
@@ -126,6 +147,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof MainIndexImport
+      parentRoute: typeof MainImport
+    }
+    '/_main/products/$product': {
+      id: '/_main/products/$product'
+      path: '/products/$product'
+      fullPath: '/products/$product'
+      preLoaderRoute: typeof MainProductsProductImport
       parentRoute: typeof MainImport
     }
     '/_main/categories/': {
@@ -152,15 +180,19 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface MainRouteChildren {
   MainBasketRoute: typeof MainBasketRoute
-  MainLikedsRoute: typeof MainLikedsRoute
+  MainProfileRoute: typeof MainProfileRoute
+  MainWarehouseRoute: typeof MainWarehouseRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainProductsProductRoute: typeof MainProductsProductRoute
   MainCategoriesIndexRoute: typeof MainCategoriesIndexRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
   MainBasketRoute: MainBasketRoute,
-  MainLikedsRoute: MainLikedsRoute,
+  MainProfileRoute: MainProfileRoute,
+  MainWarehouseRoute: MainWarehouseRoute,
   MainIndexRoute: MainIndexRoute,
+  MainProductsProductRoute: MainProductsProductRoute,
   MainCategoriesIndexRoute: MainCategoriesIndexRoute,
 }
 
@@ -170,9 +202,11 @@ export interface FileRoutesByFullPath {
   '': typeof MainRouteWithChildren
   '/auth': typeof AuthAuthRoute
   '/basket': typeof MainBasketRoute
-  '/likeds': typeof MainLikedsRoute
-  '/products': typeof AdminProductsLazyRoute
+  '/profile': typeof MainProfileRoute
+  '/warehouse': typeof MainWarehouseRoute
+  '/admin/products': typeof AdminProductsLazyRoute
   '/': typeof MainIndexRoute
+  '/products/$product': typeof MainProductsProductRoute
   '/categories': typeof MainCategoriesIndexRoute
 }
 
@@ -180,9 +214,11 @@ export interface FileRoutesByTo {
   '': typeof AuthRouteWithChildren
   '/auth': typeof AuthAuthRoute
   '/basket': typeof MainBasketRoute
-  '/likeds': typeof MainLikedsRoute
-  '/products': typeof AdminProductsLazyRoute
+  '/profile': typeof MainProfileRoute
+  '/warehouse': typeof MainWarehouseRoute
+  '/admin/products': typeof AdminProductsLazyRoute
   '/': typeof MainIndexRoute
+  '/products/$product': typeof MainProductsProductRoute
   '/categories': typeof MainCategoriesIndexRoute
 }
 
@@ -192,9 +228,11 @@ export interface FileRoutesById {
   '/_main': typeof MainRouteWithChildren
   '/_auth/auth': typeof AuthAuthRoute
   '/_main/basket': typeof MainBasketRoute
-  '/_main/likeds': typeof MainLikedsRoute
-  '/_admin/products': typeof AdminProductsLazyRoute
+  '/_main/profile': typeof MainProfileRoute
+  '/_main/warehouse': typeof MainWarehouseRoute
+  '/admin/products': typeof AdminProductsLazyRoute
   '/_main/': typeof MainIndexRoute
+  '/_main/products/$product': typeof MainProductsProductRoute
   '/_main/categories/': typeof MainCategoriesIndexRoute
 }
 
@@ -204,21 +242,34 @@ export interface FileRouteTypes {
     | ''
     | '/auth'
     | '/basket'
-    | '/likeds'
-    | '/products'
+    | '/profile'
+    | '/warehouse'
+    | '/admin/products'
     | '/'
+    | '/products/$product'
     | '/categories'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/auth' | '/basket' | '/likeds' | '/products' | '/' | '/categories'
+  to:
+    | ''
+    | '/auth'
+    | '/basket'
+    | '/profile'
+    | '/warehouse'
+    | '/admin/products'
+    | '/'
+    | '/products/$product'
+    | '/categories'
   id:
     | '__root__'
     | '/_auth'
     | '/_main'
     | '/_auth/auth'
     | '/_main/basket'
-    | '/_main/likeds'
-    | '/_admin/products'
+    | '/_main/profile'
+    | '/_main/warehouse'
+    | '/admin/products'
     | '/_main/'
+    | '/_main/products/$product'
     | '/_main/categories/'
   fileRoutesById: FileRoutesById
 }
@@ -247,7 +298,7 @@ export const routeTree = rootRoute
       "children": [
         "/_auth",
         "/_main",
-        "/_admin/products"
+        "/admin/products"
       ]
     },
     "/_auth": {
@@ -260,8 +311,10 @@ export const routeTree = rootRoute
       "filePath": "_main.tsx",
       "children": [
         "/_main/basket",
-        "/_main/likeds",
+        "/_main/profile",
+        "/_main/warehouse",
         "/_main/",
+        "/_main/products/$product",
         "/_main/categories/"
       ]
     },
@@ -273,15 +326,23 @@ export const routeTree = rootRoute
       "filePath": "_main/basket.tsx",
       "parent": "/_main"
     },
-    "/_main/likeds": {
-      "filePath": "_main/likeds.tsx",
+    "/_main/profile": {
+      "filePath": "_main/profile.tsx",
       "parent": "/_main"
     },
-    "/_admin/products": {
-      "filePath": "_admin/products.lazy.tsx"
+    "/_main/warehouse": {
+      "filePath": "_main/warehouse.tsx",
+      "parent": "/_main"
+    },
+    "/admin/products": {
+      "filePath": "admin/products.lazy.tsx"
     },
     "/_main/": {
       "filePath": "_main/index.tsx",
+      "parent": "/_main"
+    },
+    "/_main/products/$product": {
+      "filePath": "_main/products/$product.tsx",
       "parent": "/_main"
     },
     "/_main/categories/": {

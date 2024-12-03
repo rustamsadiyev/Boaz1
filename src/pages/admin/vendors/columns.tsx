@@ -1,14 +1,34 @@
 import { Button } from "@/components/ui/button";
-import { useSearch } from "@tanstack/react-router";
+import { useConfirm } from "@/hooks/useConfirm";
+import http from "@/lib/http";
+import { useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 export const useColumns = ({
   onEdit,
 }: {
-  onAdd: () => void;
-  onEdit: (val: any) => void;
-}): ColumnDef<any>[] => {
+  onEdit: (val: Category) => void;
+}): ColumnDef<Category>[] => {
+  const queryClient = useQueryClient();
+  const confirm = useConfirm();
+  async function onDelete(id: number) {
+    const isConfirmed = await confirm({
+      title: "O'chirilsinmi?",
+    });
+    if (isConfirmed) {
+      toast.promise(http.delete("vendor/" + id + "/"), {
+        loading: "O'chirilmoqda",
+        success: () => {
+          queryClient.setQueryData(["vendor/"], (oldData: Category[]) =>
+            oldData?.filter((f) => f.id !== id)
+          );
+          return "Muvaffaqiyatli o'chirildi";
+        },
+      });
+    }
+  }
   return [
     {
       header: "№",
@@ -20,14 +40,24 @@ export const useColumns = ({
     },
     {
       header: " ",
-      cell: ({ row }) => 
-            <Button
-              icon={<Edit width={18} />}
-              size="sm"
-              variant="ghost"
-              className="!text-primary"
-              onClick={() => onEdit(row.original as any)}
-            />
+      cell: ({ row }) => (
+        <div>
+          <Button
+            icon={<Edit width={18} />}
+            size="sm"
+            variant="ghost"
+            className="!text-primary"
+            onClick={() => onEdit(row.original)}
+          />
+          <Button
+            icon={<Trash2 width={18} />}
+            size="sm"
+            variant="ghost"
+            className="!text-destructive"
+            onClick={() => onDelete(row.original.id)}
+          />
+        </div>
+      ),
     },
   ];
 };

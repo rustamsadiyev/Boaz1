@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSearch } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -25,7 +26,6 @@ const ControlName = ({
   setOpen: (open: boolean) => void;
   current: Category| undefined;
 }) => {
-  const search: any = useSearch({ from: "__root__" });
   const queryClient = useQueryClient();
 
   const { post, patch, isPending } = useRequest({
@@ -43,7 +43,7 @@ const ControlName = ({
       } else {
         queryClient.setQueryData(
           ["vendor/"],
-          (oldData: Category[]) => [res,...oldData]
+          (oldData: Category[]) => [...oldData,res]
         );
         toast.success("Muvaffaqiyatli tahrirlandi");
       }
@@ -68,6 +68,13 @@ const ControlName = ({
       await post("vendor/", { ...data });
     }
   }
+
+  useEffect(() => {
+    if(!open){
+      form.reset()
+    }
+  }, [open]);
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

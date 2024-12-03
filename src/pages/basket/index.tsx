@@ -16,7 +16,7 @@ export default function Basket() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl md:text-2xl font-medium border-b pb-2">
+      <h2 className="text-lg sm:text-xl md:text-2xl font-medium border-b pb-2">
         Savatingiz {" "}
        {!!store?.length? <span className="text-muted-foreground">{store?.length} maxsulot</span>:"bo'sh"}
       </h2>

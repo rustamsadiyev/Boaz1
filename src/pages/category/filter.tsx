@@ -31,13 +31,13 @@ export default function Filter() {
       {data?.map((d) => (
         <AccordionItem value={d.category?.id?.toString()} key={d.category?.id}>
           <AccordionTrigger>{d.category?.name}</AccordionTrigger>
-          <AccordionContent>
-            {d?.vendors?.map((v) => (
+          <AccordionContent className="pl-2">
+            {d?.vendors?.filter((v) => !!v?.id)?.map((v) => (
               <Link
                 search={
                   { ...search, vendor: search.vendor == v?.id ? undefined : v.id } as any
                 }
-                className="text-primary/60 flex items-center justify-between py-0.5"
+                className="text-muted-foreground flex items-center justify-between py-0.5"
                 activeProps={{
                   className: "!text-primary",
                 }}

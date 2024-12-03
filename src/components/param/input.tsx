@@ -44,6 +44,7 @@ export default function ParamInput({
       const searchValue = inputRef.current?.value;
       if (searchValue) {
         navigate({
+          to:'/categories',
           search: clearOthers
             ? ({
                 q: searchValue,

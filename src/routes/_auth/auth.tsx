@@ -70,14 +70,14 @@ function AuthComponent() {
   return (
     <div className="flex h-[88vh] items-center justify-center px-4">
       <ParamAnimatedTabs
-        wrapperClassName="w-full max-w-sm h-[530px]"
+        wrapperClassName="w-full max-w-full sm:max-w-sm h-[530px]"
         onValueChange={() => form.reset()}
         options={[
           {
             name: "Kirish",
             id: "login",
             content: (
-              <Card className="w-full max-w-sm">
+              <Card className="w-full sm:max-w-sm">
                 <CardHeader>
                   <CardTitle className="text-lg sm:text-2xl text-center">
                     Kirish
@@ -107,7 +107,7 @@ function AuthComponent() {
             name: "Ro'yxatdan o'tish",
             id: "register",
             content: (
-              <Card className="w-full max-w-sm">
+              <Card className="w-full sm:max-w-sm">
                 <CardHeader>
                   <CardTitle className="text-lg sm:text-2xl text-center">
                     Ro'yxatdan o'tish

@@ -8,7 +8,6 @@ import { Badge } from "../ui/badge";
 export default function AnimatedFooterTab({
   options,
   value,
-  setValue,
   returnValue = "id",
   header,
   fullWidth,
@@ -49,7 +48,7 @@ export default function AnimatedFooterTab({
     <Tabs
       defaultValue={options[0]?.id.toString()}
       value={value?.toString() || currentTab.toString()}
-      className={cn("relative overflow-auto flex", wrapperClassName)}
+      className={cn("relative overflow-auto h-14 flex", wrapperClassName)}
       ref={tabRef}
       onValueChange={(value) => {
         setCurrentTab(value);
@@ -59,7 +58,7 @@ export default function AnimatedFooterTab({
       <div className="flex items-center w-full overflow-auto">
         <TabsList
           className={cn(
-            "relative w-full flex items-center justify-between h-13 -mb-1 !bg-transparent pt-2",
+            "relative w-full flex items-center justify-between h-14 -mb-1 !bg-transparent pt-2",
             fullWidth && "grid grid-cols-2"
           )}
         >
@@ -70,7 +69,7 @@ export default function AnimatedFooterTab({
                 data-index={t?.[returnValue]}
                 value={t.id.toString()}
                 className={cn(
-                  "!bg-transparent relative !text-primary duration-300 z-20 ease-out -ml-1 flex flex-col !shadow-none !p-0 py-2 !px-2",
+                  "!bg-transparent relative duration-300 z-20 ease-out -ml-1 flex flex-col !shadow-none !p-0 py-2 !px-2 data-[state=active]:text-primary",
                   fullWidth && "ml-0"
                 )}
               >
