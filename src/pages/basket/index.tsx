@@ -2,6 +2,7 @@ import { useStore } from "@/hooks/useStore";
 import { Button } from "@/components/ui/button";
 import { formatMoney } from "@/lib/format-money";
 import BasketCard from "./basket-card";
+import { toast } from "sonner";
 
 export default function Basket() {
   const { store, setStore } = useStore<Product[]>("baskets");
@@ -11,7 +12,7 @@ export default function Basket() {
 
   const handleSell = () => {
     setStore([]);
-    alert("Products sold successfully!");
+    toast.success("Buyurtma amalga oshirildi");
   };
 
   return (
