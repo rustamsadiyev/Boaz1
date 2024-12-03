@@ -4,7 +4,7 @@ import ProductCard from "@/components/shared/product-card";
 import { useUser } from "@/constants/useUser";
 
 export default function Warehouse() {
-  const { data, ref, isFetchingNextPage } = useInfiniteGet<Product>("product/");
+  const { data, ref, isFetchingNextPage } = useInfiniteGet<Product>("product/?highest_discount=true");
   const { username } = useUser();
   return (
     <div className="space-y-6">

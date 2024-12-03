@@ -12,6 +12,7 @@ import Loading from "@/layouts/loading";
 import { useSearch } from "@tanstack/react-router";
 import { format } from "date-fns";
 import Autoplay from "embla-carousel-autoplay";
+import { Fade, Slide } from "react-awesome-reveal";
 
 export default function Home() {
   const search: any = useSearch({ from: "__root__" });
@@ -59,7 +60,13 @@ export default function Home() {
               <CarouselContent className="flex items-center">
                 {latest?.data?.map((d, i: number) => (
                   <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 xl:basis-1/5 2xl:basis-1/6">
-                    <ProductCard p={d} key={i} is_authenticated={!!username} />
+                    <Fade triggerOnce key={i}>
+                      <ProductCard
+                        p={d}
+                        key={i}
+                        is_authenticated={!!username}
+                      />
+                    </Fade>
                   </CarouselItem>
                 ))}
                 <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 xl:basis-1/5 2xl:basis-1/6 h-full grid place-items-center">
@@ -81,19 +88,28 @@ export default function Home() {
             </h2>
             <div className="w-full grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">
               {prices?.data?.map((d, i: number) => (
-                <ProductCard p={d} key={i} is_authenticated={!!username} />
+                <Slide direction="up" triggerOnce>
+                  <ProductCard p={d} key={i} is_authenticated={!!username} />
+                </Slide>
               ))}
             </div>
-            {
-              prices.isFetchingNextPage && (
-                <div className="w-full flex justify-center py-4">
-                  <Loader size="responsive" />
-                </div>
-              )
-            }
-          {prices.hasNextPage&&  <div className="flex items-center justify-center pt-8">
-              <Button onClick={prices.fetchNextPage} size='lg' variant='ghost' className="!bg-background">Yana ko'rsatish +10</Button>
-            </div>}
+            {prices.isFetchingNextPage && (
+              <div className="w-full flex justify-center py-4">
+                <Loader size="responsive" />
+              </div>
+            )}
+            {prices.hasNextPage && (
+              <div className="flex items-center justify-center pt-8">
+                <Button
+                  onClick={prices.fetchNextPage}
+                  size="lg"
+                  variant="ghost"
+                  className="!bg-background"
+                >
+                  Yana ko'rsatish +10
+                </Button>
+              </div>
+            )}
           </div>
         )}
         {top?.data?.length > 0 && (
@@ -103,19 +119,28 @@ export default function Home() {
             </h2>
             <div className="w-full grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">
               {top?.data?.map((d, i: number) => (
-                <ProductCard p={d} key={i} is_authenticated={!!username} />
+                <Slide direction="up" triggerOnce>
+                  <ProductCard p={d} key={i} is_authenticated={!!username} />
+                </Slide>
               ))}
             </div>
-            {
-              top.isFetchingNextPage && (
-                <div className="w-full flex justify-center py-4">
-                  <Loader size="responsive" />
-                </div>
-              )
-            }
-            {top.hasNextPage&&  <div className="flex items-center justify-center pt-8">
-              <Button onClick={top.fetchNextPage} size='lg' variant='ghost' className="!πbg-background">Yana ko'rsatish +10</Button>
-            </div>}
+            {top.isFetchingNextPage && (
+              <div className="w-full flex justify-center py-4">
+                <Loader size="responsive" />
+              </div>
+            )}
+            {top.hasNextPage && (
+              <div className="flex items-center justify-center pt-8">
+                <Button
+                  onClick={top.fetchNextPage}
+                  size="lg"
+                  variant="ghost"
+                  className="!bg-background"
+                >
+                  Yana ko'rsatish +10
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -17,7 +17,7 @@ export default function Filter() {
       type="single"
       collapsible
       value={search.category?.toString() || ""}
-      className="w-full md:max-w-64 md:fixed md:top-20"
+      className="w-full md:max-w-64 md:fixed md:top-20 bg-background rounded p-4"
       onValueChange={(value) =>
         navigate({
           search: {
