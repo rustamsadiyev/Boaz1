@@ -3,14 +3,18 @@ import { Button } from "@/components/ui/button";
 import { formatMoney } from "@/lib/format-money";
 import BasketCard from "./basket-card";
 import { toast } from "sonner";
+import { useRequest } from "@/hooks/useRequest";
 
 export default function Basket() {
   const { store, setStore } = useStore<Product[]>("baskets");
+  const {post,isPending}=useRequest();
 
   const totalPrice =
     store?.reduce((acc, item) => acc + item.price * (item.count || 1), 0) || 0;
-
-  const handleSell = () => {
+    
+  const handleSell = async() => {
+    await post("order/",store?.map((p) => ({ product: p.id, quantity: p.count })) || []
+    )
     setStore([]);
     toast.success("Buyurtma amalga oshirildi");
   };
@@ -33,7 +37,7 @@ export default function Basket() {
             <div className="text-lg font-medium">
               Total: ${formatMoney(totalPrice.toFixed(2))}
             </div>
-            <Button onClick={handleSell} size="lg">
+            <Button onClick={handleSell} size="lg" loading={isPending}>
               Buyurtmani amalga oshirish
             </Button>
         </div>
