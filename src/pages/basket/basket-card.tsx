@@ -14,11 +14,16 @@ import CustomImage from "@/components/custom/image";
 import { formatMoney } from "@/lib/format-money";
 import SeeInView from "@/components/ui/see-in-view";
 
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+
 export default function BasketCard({ product }: { product: Product }) {
   const plugin = useRef(Autoplay({ delay: 1000 }));
   const fade = useRef(Fade());
 
   const { store, setStore } = useStore<Product[]>("baskets");
+
+  const [inputValue, setInputValue] = useState(product.count || 1);
 
   const handleQuantity = (id: number, action: "increase" | "decrease") => {
     if (!store) return;
@@ -26,7 +31,28 @@ export default function BasketCard({ product }: { product: Product }) {
       if (item.id === id) {
         const newCount = (item.count || 1) + (action === "increase" ? 1 : -1);
         if (newCount < 1) return item;
+        setInputValue(newCount);
         return { ...item, count: newCount };
+      }
+      return item;
+    });
+    setStore(newStore);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    if (value >= 1) {
+      setInputValue(value);
+    } else if (e.target.value === "") {
+      setInputValue(0);
+    }
+  };
+
+  const handleInputBlur = () => {
+    if (!store) return;
+    const newStore = store.map((item) => {
+      if (item.id === product.id) {
+        return { ...item, count: inputValue };
       }
       return item;
     });
@@ -83,9 +109,13 @@ export default function BasketCard({ product }: { product: Product }) {
             >
               <MinusIcon width={18} />
             </Button>
-            <span className="w-5 sm:w-10 text-center text-sm sm:text-base">
-              {product.count || 1}
-            </span>
+            <Input
+              min="1"
+              value={inputValue}
+              onChange={handleInputChange}
+              onBlur={handleInputBlur}
+              className="w-20 text-center"
+            />
             <Button
               variant="outline"
               size="icon"
