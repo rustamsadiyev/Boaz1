@@ -88,9 +88,9 @@ export default function Home() {
             </h2>
             <div className="w-full grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">
               {prices?.data?.map((d, i: number) => (
-                <Slide direction="up" triggerOnce>
+                <Fade direction="up" triggerOnce>
                   <ProductCard p={d} key={i} is_authenticated={!!username} />
-                </Slide>
+                </Fade>
               ))}
             </div>
             {prices.isFetchingNextPage && (

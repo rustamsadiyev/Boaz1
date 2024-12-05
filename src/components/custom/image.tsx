@@ -39,7 +39,7 @@ export default function Image({
     {loading&&  <Skeleton
         className={cn(
           imgProps.className,
-          "w-full h-full absolute top-0 left-0 rounded-none z-0"
+          "w-full h-full absolute top-0 left-0 rounded-none z-0 duration-300"
         )}
       />}
     </div>

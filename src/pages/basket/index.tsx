@@ -4,6 +4,7 @@ import { formatMoney } from "@/lib/format-money";
 import BasketCard from "./basket-card";
 import { toast } from "sonner";
 import { useRequest } from "@/hooks/useRequest";
+import { Fade } from "react-awesome-reveal";
 
 export default function Basket() {
   const { store, setStore } = useStore<Product[]>("baskets");
@@ -28,7 +29,9 @@ export default function Basket() {
 
       <div className="flex flex-col gap-4">
         {store?.map((product) => (
+          <Fade key={product.id} direction="up">
             <BasketCard key={product.id} product={product} />
+          </Fade>
         ))}
       </div>
 

@@ -1,5 +1,4 @@
 import {
-  Heart,
   LogIn,
   LogOut,
   Settings,
@@ -22,7 +21,6 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { useConfirm } from "@/hooks/useConfirm";
-import { CategoryDrawer } from "@/pages/category/category-drawer";
 import { Skeleton } from "../ui/skeleton";
 import {
   DropdownMenu,
@@ -57,6 +55,7 @@ export default function Header() {
     }
   }
 
+  if(pathname === "/auth") return null
   return (
     <div className="bg-background/60 sticky top-0 left-0 right-0 z-40">
       <header className="flex flex-col  backdrop-blur px-2 sm:px-4 xl:container mx-auto 2xl:p-0">
@@ -128,25 +127,13 @@ export default function Header() {
                   </Tooltip>
                 </TooltipProvider>
               )}
-              {pathname === "/categories" && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <CategoryDrawer />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Admin</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )}
               {username ? (
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <DropdownMenu>
                         <div className="relative h-10">
-                          <DropdownMenuTrigger className="!outline-none">
+                          <DropdownMenuTrigger className="!outline-none" asChild>
                             <Button
                               icon={<User width={18} />}
                               variant="ghost"
@@ -178,6 +165,7 @@ export default function Header() {
                   </Tooltip>
                 </TooltipProvider>
               ) : (
+                pathname !== "/auth" &&
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -194,10 +182,7 @@ export default function Header() {
             </div>
           </div>
         </div>
-        {!["/auth", "/categories"].find((p) =>
-          pathname.includes(p)
-        ) && (
-          <div className="hidden md:flex w-full overflow-x-auto gap-8 pb-2">
+          <div className="flex w-full overflow-x-auto gap-8 pb-2">
             {isLoading
               ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((c) => (
                   <Skeleton key={c} className="w-32 h-6" />
@@ -205,14 +190,13 @@ export default function Header() {
               : categories?.map((c) => (
                   <Link
                     to={`/categories/?category=${c.id}`}
-                    className="text-secondary-foreground/50 hover:text-primary"
+                    className={`text-secondary-foreground/50 hover:text-primary ${pathname === `/categories/?category=${c.id}` && "text-primary"}`}
                     key={c.id}
                   >
                     {c.name}
                   </Link>
                 ))}
           </div>
-        )}
       </header>
     </div>
   );

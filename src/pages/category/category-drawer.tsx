@@ -16,7 +16,9 @@ export function CategoryDrawer() {
   return (
     <Drawer>
       <DrawerTrigger asChild className="md:hidden">
-        <Button variant="ghost" icon={<SlidersHorizontal width={18}/>}/>
+        <Button variant='secondary'>
+        Filtr
+        </Button>
       </DrawerTrigger>
       <DrawerContent className="h-screen p-2">
         <DrawerHeader className="flex items-center justify-between p-0">
