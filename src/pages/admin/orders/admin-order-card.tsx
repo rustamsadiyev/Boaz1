@@ -5,12 +5,17 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useRequest } from "@/hooks/useRequest";
 import { formatMoney } from "@/lib/format-money";
@@ -18,11 +23,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSearch } from "@tanstack/react-router";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
-import { Trash2 } from "lucide-react";
+import {  ChevronDown } from "lucide-react";
 import { useRef } from "react";
 import { toast } from "sonner";
 
-export default function OrderCard({
+export default function AdminOrderCard({
   p,
 }: {
   p: {
@@ -36,26 +41,26 @@ export default function OrderCard({
   const plugin = useRef(Autoplay({ delay: 3000 }));
   const fade = useRef(Fade());
 
-  const confirm=useConfirm()
+  const { patch } = useRequest();
   const search: any = useSearch({ from: "__root__" });
-  const {patch}=useRequest()
-  const queryClient=useQueryClient()
+  const queryClient = useQueryClient();
+  const confirm = useConfirm();
 
-  async function handleCancel(id: number) {
-    const isConfirmed = await confirm({
-      title: "Buyurtmani bekor qilinsinmi?",
-    });
-    if (isConfirmed){
-      toast.promise(
-        patch(`order/${id}/`,{status:3}),
-        {
-          loading: "O'zgartirilmoqda...",
-          success: () => {
-            queryClient.invalidateQueries({queryKey:["order/",search]})
-            return "Muvaffaqiyatli bekor qilindi";
-          },
-        }
-      );
+  async function changeStatus(status: number) {
+    const isConfirmed =
+      (status === 3 || status === 4)
+        ? await confirm({
+            title:status===3?"Buyurtmani bekor qilinsinmi": "Buyurtmani tasdiqlansinmi?",
+          })
+        : true;
+    if (isConfirmed) {
+      toast.promise(patch(`order/${p.id}/`, { ...search,status:undefined} ), {
+        loading: "O'zgartirilmoqda...",
+        success: () => {
+         queryClient.invalidateQueries({queryKey:["order/?activated=true&delivering=true&pending=true",{...search,status:undefined}]})
+          return "Muvaffaqiyatli o'zgartirildi";
+        },
+      });
     }
   }
 
@@ -68,9 +73,31 @@ export default function OrderCard({
       <div className="flex items-center justify-between pb-4">
         <p>
           Buyurtma holati:{" "}
-          <span className="text-foreground font-semibold">
-            {statuses[p.status as 0 | 1 | 2 | 3 | 4]}
-          </span>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <span className="text-foreground font-semibold flex items-center gap-1">
+                {statuses[p.status as 0 | 1 | 2 | 3 | 4]}{" "}
+                <ChevronDown width={18} />
+              </span>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => changeStatus(0)}>
+                {statuses[0]}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => changeStatus(1)}>
+                {statuses[1]}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => changeStatus(2)}>
+                {statuses[2]}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => changeStatus(3)}>
+                {statuses[3]}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => changeStatus(4)}>
+                {statuses[4]}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </p>
         <p>
           Yetkazilish (Yetkazilgan) sanasi:{" "}
@@ -79,8 +106,8 @@ export default function OrderCard({
           </span>
         </p>
       </div>
-      {p.cart?.map((c,i) => (
-        <AccordionItem value={c.id?.toString()} key={i}>
+      {p.cart?.map((c) => (
+        <AccordionItem value={c.id.toString()} key={c.id}>
           <AccordionTrigger>
             <div className="flex flex-col items-start gap-2">
               <p className="font-normal text-muted-foreground">
@@ -96,7 +123,6 @@ export default function OrderCard({
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="flex items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <Carousel
                 className="w-32"
@@ -139,10 +165,8 @@ export default function OrderCard({
                   <p>{c.product?.description}</p>
                 </div>
               </div>
-          </div>
-          <Button icon={<Trash2 width={18}/>} variant='ghost' className="!text-destructive" onClick={()=>handleCancel(p.id)}/>
-          </div>
-        </AccordionContent>
+            </div>
+          </AccordionContent>
         </AccordionItem>
       ))}
     </Accordion>
