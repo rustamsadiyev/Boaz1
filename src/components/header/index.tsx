@@ -88,35 +88,6 @@ export default function Header() {
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <Link
-                                            to="/basket"
-                                            className="relative hidden sm:inline"
-                                            activeProps={{
-                                                className: "!text-primary",
-                                            }}
-                                        >
-                                            <Button
-                                                icon={
-                                                    <ShoppingCart width={18} />
-                                                }
-                                                variant="ghost"
-                                            />
-                                            {!!store?.length &&
-                                                store?.length! >= 1 && (
-                                                    <Badge className="absolute -top-2 -right-2">
-                                                        {store?.length}
-                                                    </Badge>
-                                                )}
-                                        </Link>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Savat</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Link
                                             to="/categories"
                                             className="hidden sm:inline"
                                             activeProps={{
@@ -157,7 +128,35 @@ export default function Header() {
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
-
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Link
+                                            to="/basket"
+                                            className="relative hidden sm:inline"
+                                            activeProps={{
+                                                className: "!text-primary",
+                                            }}
+                                        >
+                                            <Button
+                                                icon={
+                                                    <ShoppingCart width={18} />
+                                                }
+                                                variant="ghost"
+                                            />
+                                            {!!store?.length &&
+                                                store?.length! >= 1 && (
+                                                    <Badge className="absolute -top-2 -right-2">
+                                                        {store?.length}
+                                                    </Badge>
+                                                )}
+                                        </Link>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Savat</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                             {is_admin && (
                                 <TooltipProvider>
                                     <Tooltip>
@@ -189,7 +188,7 @@ export default function Header() {
                                             <DropdownMenu>
                                                 <div className="relative h-10">
                                                     <DropdownMenuTrigger
-                                                        className="!outline-none"
+                                                        className="!outline-none hidden sm:inline"
                                                         asChild
                                                     >
                                                         <Button
