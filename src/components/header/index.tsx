@@ -72,7 +72,7 @@ export default function Header() {
     if (pathname === "/auth") return null;
     return (
         <div className="bg-background/60 sticky top-0 left-0 right-0 z-40">
-            <header className="flex flex-col  backdrop-blur px-2 sm:px-4 xl:container mx-auto 2xl:p-0">
+            <header className="flex flex-col  backdrop-blur px-2 sm:px-4 xl:container mx-auto">
                 <div className="flex items-center justify-between py-1.5 sm:py-3">
                     <Link to="/">
                         <h2 className="hidden sm:inline text-2xl md:text-3xl xl:text-4xl font-semibold font-[Lobster] text-primary">

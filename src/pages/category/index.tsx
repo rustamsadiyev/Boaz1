@@ -16,6 +16,8 @@ export default function Category() {
             category: search.category,
             vendor: search.vendor == "all" ? undefined : search.vendor,
         });
+        // console.log(data);
+        
 
     const { username } = useUser();
     return (

@@ -13,6 +13,7 @@ export const useColumns = ({
 }): ColumnDef<Category>[] => {
   const queryClient = useQueryClient();
   const confirm = useConfirm();
+
   async function onDelete(id: number) {
     const isConfirmed = await confirm({
       title: "O'chirilsinmi?",
@@ -29,10 +30,28 @@ export const useColumns = ({
       });
     }
   }
+
   return [
     {
       header: "№",
       cell: ({ row }) => (row.original.name ? row.index + 1 : ""),
+    },
+    {
+      header: "Rasmi",
+      accessorKey: "image",
+      cell: ({ row }) => (
+        <div className="flex items-center">
+          {row.original.image ? (
+            <img
+              src={row.original.image}
+              alt="Category Image"
+              className="w-12 h-12 object-cover rounded-full border border-gray-300"
+            />
+          ) : (
+            <span className="text-gray-400">No image</span>
+          )}
+        </div>
+      ),
     },
     {
       header: "Nomi",

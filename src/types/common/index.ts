@@ -1,4 +1,6 @@
 type Category={
+    image: any
+    image: string | undefined
     id:number
     name:string
 }

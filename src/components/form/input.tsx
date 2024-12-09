@@ -11,6 +11,7 @@ interface IProps<IForm extends FieldValues> {
   label?: string;
   wrapperClassName?: ClassNameValue;
   hideError?: boolean;
+  type?: string; 
 }
 
 export default function FormInput<IForm extends FieldValues>({
@@ -26,6 +27,7 @@ export default function FormInput<IForm extends FieldValues>({
   const {
     register,
     formState: { errors },
+    setValue,
   } = methods;
 
   const reg = register(name);
@@ -45,15 +47,29 @@ export default function FormInput<IForm extends FieldValues>({
           {label}
         </Label>
       )}
-      <Input
-        type={type}
-        {...reg}
-        {...otherProps}
-        disabled={disabled || methods.formState.disabled}
-        placeholder={props.placeholder || label}
-        id={name}
-        fullWidth
-      />
+      {type === "file" ? (
+        <input
+          type="file"
+          {...otherProps}
+          onChange={(e) => {
+            if (e.target.files?.[0]) {
+              setValue(name, e.target.files[0], { shouldValidate: true });
+            }
+          }}
+          disabled={disabled || methods.formState.disabled}
+          id={name}
+        />
+      ) : (
+        <Input
+          type={type}
+          {...reg}
+          {...otherProps}
+          disabled={disabled || methods.formState.disabled}
+          placeholder={props.placeholder || label}
+          id={name}
+          fullWidth
+        />
+      )}
       {!hideError && errors[name] && (
         <ErrorMessage className="-mt-1">
           {errors[name]?.message as string}

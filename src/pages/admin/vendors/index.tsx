@@ -13,6 +13,8 @@ export default function Vendors() {
     "vendor/"
   );
   return (
+    <>
+    
     <div className="flex flex-col items-end gap-4">
       <Button icon={<Plus width={18} />} onClick={() => setOpen(true)}>
         Firma
@@ -30,5 +32,6 @@ export default function Vendors() {
       />
       <ControlName open={open} setOpen={setOpen} current={current} />
     </div>
+    </>
   );
 }

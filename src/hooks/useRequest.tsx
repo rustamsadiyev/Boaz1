@@ -57,11 +57,11 @@ export function useRequest<T = any>(
         }
       },
     };
-
+  
     const response = await http(axiosConfig);
     return response.data as T;
   };
-
+  
   const mutation = useMutation<T, Error, MutationVariables>({
     mutationFn,
     mutationKey: options?.mutationKey,
