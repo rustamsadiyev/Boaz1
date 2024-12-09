@@ -30,7 +30,6 @@ export default function Category() {
                     </h2>
                     <CategoryDrawer />
                 </div>
-                {!!search.vendor && (
                     <Loading loading={isLoading}>
                         <div className="flex flex-col">
                             <div className="w-full grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">
@@ -54,7 +53,6 @@ export default function Category() {
                             </div>
                         </div>
                     </Loading>
-                )}
             </div>
         </div>
     );
