@@ -16,8 +16,6 @@ export default function Category() {
             category: search.category,
             vendor: search.vendor == "all" ? undefined : search.vendor,
         });
-        // console.log(data);
-        
 
     const { username } = useUser();
     return (
@@ -32,31 +30,27 @@ export default function Category() {
                     </h2>
                     <CategoryDrawer />
                 </div>
-                {!!search.vendor && (
-                    <Loading loading={isLoading}>
-                        <div className="flex flex-col">
-                            <div className="w-full grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">
-                                {data?.map((d, i: number) => (
-                                    <Fade key={i} direction="up" triggerOnce>
-                                        <ProductCard
-                                            p={d}
-                                            key={i}
-                                            is_authenticated={!!username}
-                                        />
-                                    </Fade>
-                                ))}
-                            </div>
-                            <div
-                                className="w-full flex justify-center py-4"
-                                ref={ref}
-                            >
-                                {isFetchingNextPage && (
-                                    <Loader size="responsive" />
-                                )}
-                            </div>
+                <Loading loading={isLoading}>
+                    <div className="flex flex-col">
+                        <div className="w-full grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">
+                            {data?.map((d, i: number) => (
+                                <Fade key={i} direction="up" triggerOnce>
+                                    <ProductCard
+                                        p={d}
+                                        key={i}
+                                        is_authenticated={!!username}
+                                    />
+                                </Fade>
+                            ))}
                         </div>
-                    </Loading>
-                )}
+                        <div
+                            className="w-full flex justify-center py-4"
+                            ref={ref}
+                        >
+                            {isFetchingNextPage && <Loader size="responsive" />}
+                        </div>
+                    </div>
+                </Loading>
             </div>
         </div>
     );
