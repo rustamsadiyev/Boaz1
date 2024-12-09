@@ -186,27 +186,23 @@ export default function Header() {
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <DropdownMenu>
-                                                <div className="relative h-10">
-                                                    <DropdownMenuTrigger
-                                                        className="!outline-none hidden sm:inline"
-                                                        asChild
-                                                    >
-                                                        <Button
-                                                            icon={
-                                                                <User
-                                                                    width={18}
-                                                                />
-                                                            }
-                                                            variant="ghost"
-                                                            className={
-                                                                pathname ===
-                                                                "/profile"
-                                                                    ? "text-primary"
-                                                                    : ""
-                                                            }
-                                                        />
-                                                    </DropdownMenuTrigger>
-                                                </div>
+                                                <DropdownMenuTrigger
+                                                    className="!outline-none hidden sm:flex"
+                                                    asChild
+                                                >
+                                                    <Button
+                                                        icon={
+                                                            <User width={18} />
+                                                        }
+                                                        variant="ghost"
+                                                        className={
+                                                            pathname ===
+                                                            "/profile"
+                                                                ? "text-primary"
+                                                                : ""
+                                                        }
+                                                    />
+                                                </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="center">
                                                     <DropdownMenuItem
                                                         className="cursor-pointer flex items-center gap-2"
