@@ -143,7 +143,7 @@ export default function ProductCard({
                                             contain
                                             height={200}
                                             width={"100%"}
-                                            className="mix-blend-multiply group-hover:scale-[1.02] duration-300"
+                                            className="mix-blend-multiply group-hover:scale-[1.02] !h-40 sm:h-[200px] duration-300"
                                             onMouseEnter={() =>
                                                 plugin.current.play()
                                             }
