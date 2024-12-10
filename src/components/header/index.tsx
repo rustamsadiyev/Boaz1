@@ -22,7 +22,6 @@ import {
     TooltipTrigger,
 } from "../ui/tooltip";
 import { useConfirm } from "@/hooks/useConfirm";
-import { Skeleton } from "../ui/skeleton";
 import {
     DropdownMenu,
     DropdownMenuContent,
