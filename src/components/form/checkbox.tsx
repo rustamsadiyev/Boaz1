@@ -11,13 +11,16 @@ interface IProps<IForm extends FieldValues> {
   label?: string;
   wrapperClassName?: ClassNameValue;
   hideError?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
 export default function FormCheckbox<IForm extends FieldValues>({
   methods,
   name,
   label,
   hideError = false,
   disabled,
+  onChange,
 }: IProps<IForm> & { disabled?: boolean }) {
   return (
     <div>
@@ -31,6 +34,7 @@ export default function FormCheckbox<IForm extends FieldValues>({
               onCheckedChange={field.onChange}
               disabled={disabled || field.disabled}
               id={name}
+              onChange={onChange}
             />
             <Label
               htmlFor={name}

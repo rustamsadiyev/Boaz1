@@ -39,7 +39,7 @@ import {
 export default function Header() {
     const { store } = useStore<{ name: string }[]>("baskets");
     const confirm = useConfirm();
-    const { username, is_admin } = useUser();
+    const { username, is_admin, is_best_client } = useUser();
     const { data: likeds } = useGet<{ product_ids: number[] }>(
         "user/favourite/?only_ids=true",
         undefined,
@@ -116,10 +116,10 @@ export default function Header() {
                                                 className: "!text-primary",
                                             }}
                                         >
-                                            <Button
+                                            { is_best_client && <Button
                                                 icon={<Warehouse width={18} />}
                                                 variant="ghost"
-                                            />
+                                            />}
                                         </Link>
                                     </TooltipTrigger>
                                     <TooltipContent>
