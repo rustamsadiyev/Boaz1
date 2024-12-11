@@ -10,6 +10,8 @@ export default function Vendors() {
     const [open, setOpen] = useState(false);
     const [current, setCurrent] = useState<any>();
     const { data, isLoading } = useGet<Category[]>("vendor/");
+    console.log(data);
+    
     return (
         <>
             <div className="flex flex-col items-end gap-4">

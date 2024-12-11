@@ -120,16 +120,16 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
                     typeof data.image4 === "string" ? undefined : data.image4,
             });
             toast.success("Muvaffaqiyatli tahrirlandi");
-            // setOpen(false);
-            // form.reset();
+            setOpen(false);
+            form.reset();
         } else {
             await post("product/", {
                 ...data,
                 discounted_price: data.discounted_price || undefined,
             });
             toast.success("Muvaffaqiyatli qo'shildi");
-            // setOpen(false);
-            // form.reset();
+            setOpen(false);
+            form.reset();
         }
 
         queryClient.invalidateQueries({
