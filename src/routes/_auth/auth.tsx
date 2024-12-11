@@ -43,11 +43,10 @@ function AuthComponent() {
       if (search.page_tabs === "register") {
         const { status } = await axios.post(
           import.meta.env.VITE_DEFAULT_URL + "user/",
-          { ...data, is_best_client: isBestClient }
+          { ...data, isBestClient }
         );
   
         if (status === 201) {
-          // console.log("is_best_client:", isBestClient);
           navigate({ search: undefined });
         }
       } else {

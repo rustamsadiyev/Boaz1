@@ -10,16 +10,16 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  const { is_best_client } = useUser();
+  const { is_best_client, is_admin } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    if (!is_best_client && window.location.pathname === "/warehouse") {
+    if (!is_best_client && !is_admin && window.location.pathname === "/warehouse") {
       navigate({ to: "/", replace: true });
     }
-  }, [is_best_client, navigate]);
+  }, [is_best_client, is_admin, navigate]);
 
   return (
     <div className="min-h-screen relative overflow-x-visible md:pb-4">

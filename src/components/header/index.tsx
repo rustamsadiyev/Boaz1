@@ -116,7 +116,7 @@ export default function Header() {
                                                 className: "!text-primary",
                                             }}
                                         >
-                                            { is_best_client && <Button
+                                            { (is_best_client || is_admin) && <Button
                                                 icon={<Warehouse width={18} />}
                                                 variant="ghost"
                                             />}

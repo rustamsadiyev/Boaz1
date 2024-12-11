@@ -20,52 +20,54 @@ export default function Filter() {
     }[]>("https://ecommerce-api.loongair.uz/api/v1/categories/");
 
     return (
-        <Accordion
-            type="single"
-            collapsible
-            value={search.category?.toString() || ""}
-            className="w-full md:max-w-64 md:fixed md:top-32 bg-background rounded p-4"
-            onValueChange={(value) =>
-                navigate({
-                    search: {
-                        ...search,
-                        vendor: undefined,
-                        category: value ? +value : undefined,
-                    } as any,
-                })
-            }
-        >
-            {data?.map((category) => (
-                <AccordionItem value={category.id.toString()} key={category.id}>
-                    <AccordionTrigger>
-                        {category.name}
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-2">
-                        {category.vendors?.map((vendor) => (
-                            <Link
-                                search={{
-                                    ...search,
-                                    vendor: search.vendor === vendor.id ? undefined : vendor.id,
-                                }}
-                                className="text-muted-foreground flex items-center justify-between py-0.5"
-                                activeProps={{
-                                    className: "!text-primary",
-                                }}
-                                key={vendor.id}
-                            >
-                                {vendor.name}
-                                <Check
-                                    width={14}
-                                    className={cn(
-                                        "text-transparent",
-                                        search.vendor === vendor.id && "!text-primary"
-                                    )}
-                                />
-                            </Link>
-                        ))}
-                    </AccordionContent>
-                </AccordionItem>
-            ))}
-        </Accordion>
+<Accordion
+  type="single"
+  collapsible
+  value={search.category?.toString() || ""}
+  className="w-full md:max-w-64 md:fixed md:top-32 bg-background rounded-lg p-4 shadow-md"
+  onValueChange={(value) =>
+    navigate({
+      search: {
+        ...search,
+        vendor: undefined,
+        category: value ? +value : undefined,
+      } as any,
+    })
+  }
+>
+  {data?.map((category) => (
+    <AccordionItem value={category.id.toString()} key={category.id}>
+      <AccordionTrigger
+        className="text-lg font-semibold text-gray-800 py-3 px-6 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
+      >
+        {category.name}
+      </AccordionTrigger>
+      <AccordionContent className="pl-1">
+        {category.vendors?.map((vendor) => (
+          <Link
+            search={{
+              ...search,
+              vendor: search.vendor === vendor.id ? undefined : vendor.id,
+            }}
+            className="flex items-center justify-between py-2 px-6 rounded-md text-gray-700 hover:bg-gray-50 mb-2 focus:outline-none"
+            activeProps={{
+              className: "text-indigo-600 bg-gray-50",
+            }}
+            key={vendor.id}
+          >
+            <span className="text-sm">{vendor.name}</span>
+            <Check
+              width={14}
+              className={cn(
+                "text-transparent",
+                search.vendor === vendor.id && "text-indigo-600"
+              )}
+            />
+          </Link>
+        ))}
+      </AccordionContent>
+    </AccordionItem>
+  ))}
+</Accordion>
     );
 }
