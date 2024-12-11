@@ -33,14 +33,14 @@ export default function Category() {
                 <Loading loading={isLoading}>
                     <div className="flex flex-col">
                         <div className="w-full grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">
-                            {data?.map((d, i: number) => (
-                                <Fade key={i} direction="up" triggerOnce>
+                            {data?.map((d) => (  
+                                <Fade key={d.id} direction="up" triggerOnce>
                                     <ProductCard
                                         p={d}
-                                        key={i}
+                                        key={d.id}
                                         is_authenticated={!!username}
                                     />
-                                </Fade>
+                             </Fade>
                             ))}
                         </div>
                         <div
