@@ -16,7 +16,7 @@ export default function OrdersHistory() {
         cart: { id: number; order: 1; product: Product; quantity: number }[];
     }>("order/", { ...search, status: undefined });
     return (
-        <div className="overflow-hidden space-y-4">
+        <div className="overflow-hidden pt-2">
             <ParamAnimatedTabs
                 paramName="status"
                 options={[
@@ -39,20 +39,20 @@ export default function OrdersHistory() {
                 ]}
             />
             <Loading loading={isLoading}>
-                <div className="flex flex-col gap-4">
-                    {data
-                        ?.filter((d) =>
-                            !!search.status
-                                ? d.status ==
-                                  (search.status == 10 ? 0 : search.status)
-                                : true
-                        )
-                        ?.map((d, i: number) => (
-                            <Fade direction="up" triggerOnce>
-                                <OrderCard p={d} key={i} />
-                            </Fade>
-                        ))}
-                </div>
+            <div className="flex flex-col gap-4">
+    {data
+        ?.filter((d) =>
+            !!search.status
+                ? d.status == (search.status == 10 ? 0 : search.status)
+                : true
+        )
+        ?.map((d) => (
+            <Fade direction="up" triggerOnce key={d.id}>
+                <OrderCard p={d} />
+            </Fade>
+        ))}
+</div>
+
 
                 <div className="w-full flex justify-center py-4" ref={ref}>
                     {isFetchingNextPage && <Loader size="responsive" />}

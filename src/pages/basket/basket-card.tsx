@@ -96,16 +96,16 @@ export default function BasketCard({ product }: { product: Product }) {
           </CarouselContent>
         </Carousel>
         <div className="flex items-end sm:items-center justify-between w-full gap-x-4 gap-y-2 flex-col sm:flex-row flex-wrap">
-          <h3 className="text-sm sm:text-base font-medium">{product.name}</h3>
+          <h3 className="text-sm sm:text-base sm:max-w-[10vh] font-medium">{product.name}</h3>
           <p className="text-muted-foreground text-sm sm:text-base">
             {formatMoney(product.price, "", true)}
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:max-md:gap-1">
             <Button
               variant="outline"
               size="icon"
               onClick={() => handleQuantity(product.id, "decrease")}
-              className="h-7 w-7 sm:w-10 sm:h-10"
+              className="h-7 w-7 w-10 h-10 sm:max-md:w-8 "
             >
               <MinusIcon width={18} />
             </Button>
@@ -114,13 +114,13 @@ export default function BasketCard({ product }: { product: Product }) {
               value={inputValue}
               onChange={handleInputChange}
               onBlur={handleInputBlur}
-              className="w-20 text-center"
+              className="w-20 sm:max-md:w-16 text-center"
             />
             <Button
               variant="outline"
               size="icon"
               onClick={() => handleQuantity(product.id, "increase")}
-              className="h-7 w-7 sm:w-10 sm:h-10"
+              className="h-7 w-7 w-10 h-10 sm:max-md:w-8 "
             >
               <PlusIcon width={18} />
             </Button>

@@ -99,7 +99,7 @@ export default function AdminOrderCard({
                     </DropdownMenu>
                 </p>
                 <p>
-                    Yetkazilish (Yetkazilgan) sanasi:{" "}
+                    Yetkazilish sanasi:{" "}
                     <span className="text-foreground font-semibold">
                         {p.updated_at.split("T")[0]}
                     </span>

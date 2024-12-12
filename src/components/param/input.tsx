@@ -77,7 +77,7 @@ export default function ParamInput({
   return (
     <>
       <Input
-        placeholder="Qidiruv..."
+        placeholder="جستجو..."
         type="search"
         className={`${className}`}
         fullWidth={fullWidth}

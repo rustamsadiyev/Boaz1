@@ -25,7 +25,7 @@ export default function Filter() {
             type="single"
             collapsible
             value={search.category?.toString() || ""}
-            className="w-full md:max-w-64 md:fixed md:top-32 bg-background rounded-lg p-4 shadow-md"
+            className="w-full md:max-w-64 md:fixed md:top-[16vh] bg-background rounded-lg p-4 shadow-md"
             onValueChange={(value) =>
                 navigate({
                     search: {
@@ -69,7 +69,7 @@ export default function Filter() {
                                         )}
                                     />
                                 </Link>
-                            ) : null // Exclude vendor if it doesn't match the conditions
+                            ) : null
                         )}
                     </AccordionContent>
                 </AccordionItem>

@@ -26,6 +26,7 @@ export default function OrderCard({
     p,
 }: {
     p: {
+        user: any;
         id: number;
         quantity: number;
         status: number;
@@ -62,7 +63,7 @@ export default function OrderCard({
         <Accordion
             type="single"
             collapsible
-            className="w-full bg-background p-4 rounded"
+            className="w-full bg-background p-4 rounded mt-0 "
         >
             <div className="flex items-center justify-between pb-4">
                 <p>
@@ -72,7 +73,7 @@ export default function OrderCard({
                     </span>
                 </p>
                 <p>
-                    Yetkazilish (Yetkazilgan) sanasi:{" "}
+                    Yetkazilish sanasi:{" "}
                     <span className="text-foreground font-semibold">
                         {p.updated_at.split("T")[0]}
                     </span>
@@ -140,7 +141,14 @@ export default function OrderCard({
                                                 true
                                             )}
                                         </p>
-                                    </div>
+                                        
+                                    </div>      
+                            <p className="font-normal text-muted-foreground">
+                                Mijoz:{" "}
+                                <span className="text-foreground font-semibold">
+                                    {p.user?.full_name}
+                                </span>
+                            </p>
                                     <div className="flex items-center gap-2">
                                         <p>{c.product?.description}</p>
                                     </div>
@@ -159,6 +167,7 @@ export default function OrderCard({
                 </AccordionItem>
             ))}
         </Accordion>
+
     );
 }
 

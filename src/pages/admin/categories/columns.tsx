@@ -41,7 +41,7 @@ export const useColumns = ({
     {
       header: " ",
       cell: ({ row }) => (
-        <div>
+        <div className="text-center" >
           <Button
             icon={<Edit width={18} />}
             size="sm"

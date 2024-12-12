@@ -34,6 +34,8 @@ export default function Home() {
   const top = useInfiniteGet<Product>("product/?most_sold=true", search);
 
   const { username } = useUser();
+  console.log(latest?.data);
+
 
   return (
     <Loading loading={latest.isLoading}>
@@ -69,14 +71,16 @@ export default function Home() {
                     </Fade>
                   </CarouselItem>
                 ))}
-                <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 xl:basis-1/5 2xl:basis-1/6 h-full grid place-items-center">
-                  <div
-                    className="w-full flex justify-center py-4"
-                    ref={latest.ref}
-                  >
-                    {latest.isFetchingNextPage && <Loader size="responsive" />}
-                  </div>
-                </CarouselItem>
+             { latest?.hasNextPage&& <CarouselItem
+                  className="w-0"
+                  ref={latest.hasNextPage ? latest.ref : undefined}
+                >
+                  {latest.isFetchingNextPage && (
+                    <div className="w-full flex justify-center py-4">
+                      <Loader size="responsive" />
+                    </div>
+                  )}
+                </CarouselItem>}
               </CarouselContent>
             </Carousel>
           </div>
