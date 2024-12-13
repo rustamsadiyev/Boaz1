@@ -35,17 +35,24 @@ export const useColumns = ({
 
     return [
         {
-            header: "№",
-            cell: ({ row }) => (row.original.name ? row.index + 1 : ""),
-        },
-        {
-            header: "Nomi",
-            accessorKey: "name",
-        },
-        {
-            header: " ",
+            header: () => <div className="text-center">№</div>, // Center the header
+            accessorKey: "index",
             cell: ({ row }) => (
-                <div>
+                <div className="text-center">{row.index + 1}</div>
+            ),
+        },
+        {
+            header: () => <div className="text-center">Nomi</div>, // Center the header
+            accessorKey: "name",
+            cell: ({ row }) => (
+                <div className="text-center">{row.original.name}</div>
+            ),
+        },
+        {
+            header: () => <div className="text-center"> </div>, // Center the header
+            accessorKey: "actions",
+            cell: ({ row }) => (
+                <div className="flex justify-center items-center space-x-2">
                     <Button
                         icon={<Edit width={18} />}
                         size="sm"

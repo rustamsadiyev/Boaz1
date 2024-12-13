@@ -28,11 +28,13 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useState } from "react";
 
 export default function Header() {
     const { store } = useStore<{ name: string }[]>("baskets");
     const confirm = useConfirm();
     const { username, is_admin, is_best_client } = useUser();
+    const [showDiv, setShowDiv] = useState(false);
     
     const { data: likeds } = useGet<{ product_ids: number[] }>(
         "user/favourite/?only_ids=true",
@@ -74,9 +76,10 @@ export default function Header() {
             </Link>
             <div className="flex justify-between gap-1 w-full sm:w-auto overflow-x-auto">
                 {pathname !== "/auth" && (
-                    <ParamInput className="flex-shrink-0" />
+                    <ParamInput className="flex-shrink-0  " />
                 )}
-                <div className="flex gap-1 flex-shrink-0">
+                    
+                <div className="flex gap-1 flex-shrink-0 sm:max-md: ">
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -141,7 +144,7 @@ export default function Header() {
             </Badge>
         )}
     </Link>
-</div>
+                                </div>
 
                             </TooltipTrigger>
                             <TooltipContent>

@@ -31,6 +31,7 @@ export default function AdminOrderCard({
     p,
 }: {
     p: {
+        user: any;
         id: number;
         quantity: number;
         status: number;
@@ -78,9 +79,9 @@ export default function AdminOrderCard({
             collapsible
             className="w-full bg-background p-4 rounded"
         >
-            <div className="flex items-center justify-between pb-4">
+            <div className="flex sm:max-md:block items-center justify-between pb-4">
                 <p>
-                    Buyurtma holati:{" "}
+                    Holat:{" "}
                     <DropdownMenu>
                         <DropdownMenuTrigger>
                             <span className="text-foreground font-semibold flex items-center gap-1">
@@ -98,7 +99,7 @@ export default function AdminOrderCard({
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </p>
-                <p>
+                <p className="" >
                     Yetkazilish sanasi:{" "}
                     <span className="text-foreground font-semibold">
                         {p.updated_at.split("T")[0]}
@@ -115,12 +116,20 @@ export default function AdminOrderCard({
                                     {c.id}
                                 </span>
                             </p>
-                            <p className="font-normal text-muted-foreground">
-                                Soni:{" "}
+                            <div className="flex flex-col text-start">
+                            <p className="font-normal text-muted-foreground items-start">
+                                Buyurtma qiymati:{" "}
                                 <span className="text-foreground font-semibold">
-                                    {c.quantity}
+                                {formatMoney(
+                                                (c.product?.discounted_price ||
+                                                    c.product?.price) *c.quantity ,
+                                                undefined,
+                                                true
+                                            )}
                                 </span>
                             </p>
+                            </div>
+                            
                         </div>
                     </AccordionTrigger>
                     <AccordionContent>
@@ -158,6 +167,7 @@ export default function AdminOrderCard({
                                     <p className="font-semibold text-muted-foreground">
                                         Narxi:{" "}
                                     </p>
+                                    
                                     <p>
                                         {formatMoney(
                                             c.product?.discounted_price ||
@@ -165,11 +175,24 @@ export default function AdminOrderCard({
                                             undefined,
                                             true
                                         )}
+                                    </p> 
+                                </div>
+                                
+                                <div className="flex items-center gap-2 text-base">
+                                    <p className="font-semibold text-muted-foreground">
+                                        Mijoz ismi:{" "}
                                     </p>
+                                    <p>{p.user?.full_name}</p>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <p>{c.product?.description}</p>
+                                <div>
+                                    
                                 </div>
+                            <p className="font-semibold text-muted-foreground">
+                                Soni:{" "}
+                                <span className="text-foreground font-semibold">
+                                    {c.quantity}
+                                </span>
+                            </p>
                             </div>
                         </div>
                     </AccordionContent>

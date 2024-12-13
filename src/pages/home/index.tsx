@@ -39,18 +39,19 @@ export default function Home() {
 
   return (
     <Loading loading={latest.isLoading}>
-      <div className="space-y-6 sm:space-y-9 md:space-y-12">
+      <div className="space-y-6 sm:space-y-9 md:space-y-12 overflow-hidden ">
         {latest?.data?.length > 0 && (
           <div className="space-y-2 md:space-y-4">
             <h2 className="text-lg sm:text-xl md:text-2xl font-medium">
               Haftaning eng yangi maxsulotlari
             </h2>
+            <div className="grid gird-cols-2" >
             <Carousel
               opts={{
                 align: "start",
                 loop: true,
               }}
-              className="w-full maxw-sm relative rounded"
+              className="w-screen maxw-sm relative rounded grid grid-cols-"
               plugins={[
                 Autoplay({
                   delay: 3000,
@@ -83,6 +84,7 @@ export default function Home() {
                 </CarouselItem>}
               </CarouselContent>
             </Carousel>
+              </div>
           </div>
         )}
         {prices?.data?.length > 0 && (

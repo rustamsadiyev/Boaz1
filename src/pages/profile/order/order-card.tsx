@@ -67,7 +67,7 @@ export default function OrderCard({
         >
             <div className="flex items-center justify-between pb-4">
                 <p>
-                    Buyurtma holati:{" "}
+                    Holat:{" "}
                     <span className="text-foreground font-semibold">
                         {statuses[p.status as 0 | 1 | 2 | 3 | 4]}
                     </span>
@@ -143,13 +143,14 @@ export default function OrderCard({
                                         </p>
                                         
                                     </div>      
-                            <p className="font-normal text-muted-foreground">
+                            <p className="font-semibold text-muted-foreground">
                                 Mijoz:{" "}
                                 <span className="text-foreground font-semibold">
                                     {p.user?.full_name}
                                 </span>
                             </p>
                                     <div className="flex items-center gap-2">
+                                        <p className="font-semibold text-muted-foreground" >qo'shimcha ma'lumot:</p>
                                         <p>{c.product?.description}</p>
                                     </div>
                                 </div>

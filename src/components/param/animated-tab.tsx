@@ -54,7 +54,7 @@ const ParamAnimatedTabs: React.FC<ParamTabsProps> = ({
       fullWidth={fullWidth}
       value={currentTab}
       setValue={handleTabChange}
-      wrapperClassName={wrapperClassName}
+      wrapperClassName={` ${wrapperClassName}`}
     />
   );
 };

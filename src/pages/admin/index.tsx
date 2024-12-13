@@ -6,6 +6,7 @@ import Orders from "./orders";
 
 export default function Admin() {
   return (
+    <>
     <ParamAnimatedTabs
       options={[
         {
@@ -30,5 +31,7 @@ export default function Admin() {
         }
       ]}
     />
+    </>
+
   );
 }
