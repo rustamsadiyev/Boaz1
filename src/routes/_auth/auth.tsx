@@ -139,7 +139,7 @@ function AuthComponent() {
 
 const FormSchema = z.object({
   username: z.string().min(1, "Loginingizni kiriting"),
-  password: z.string().min(1, "Parolingizni kiriting kiriting"),
+  password: z.string().min(1, "Parolingizni kiriting"),
   is_best_client: z.boolean().optional().default(false)
 });
 

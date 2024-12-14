@@ -70,7 +70,9 @@ export const theme = {
       "accordion-up": "accordion-up 0.2s ease-out",
     },
     screens: {
-      sm: "350px",
+      sm: "400px",
+      xsm:"300px",
+      xmd:"450px"
     },
   },
 };

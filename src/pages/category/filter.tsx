@@ -18,7 +18,6 @@ export default function Filter() {
         name: string;
         vendors: { id: number; name: string; image: string | null }[];
     }[]>("https://ecommerce-api.loongair.uz/api/v1/categories/");
-    console.log(data);
 
     return (
         <Accordion

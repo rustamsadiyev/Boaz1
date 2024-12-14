@@ -3,29 +3,31 @@ import Categories from "./categories";
 import ParamAnimatedTabs from "@/components/param/animated-tab";
 import Vendors from "./vendors";
 import Orders from "./orders";
+import { useTranslation } from "react-i18next";
 
 export default function Admin() {
+  const { t } = useTranslation();
   return (
     <>
     <ParamAnimatedTabs
       options={[
         {
-          name:"Buyurtmalar",
+          name: t("Buyurtmalar"),
           id:"orders",
           content:<Orders/>
         },
         {
-          name: "Maxsulotlar",
+          name: t("Maxsulotlar"),
           id: "products",
           content: <Products />,
         },
         {
-          name: "Kategoriyalar",
+          name: t("Kategoriyalar"),
           id: "categories",
           content: <Categories />,
         },
         {
-          name:"Firmalar",
+          name:t("Firmalar"),
           id:"companies",
           content:<Vendors/>
         }

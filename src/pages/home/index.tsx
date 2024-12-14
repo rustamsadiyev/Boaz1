@@ -13,6 +13,7 @@ import { useSearch } from "@tanstack/react-router";
 import { format } from "date-fns";
 import Autoplay from "embla-carousel-autoplay";
 import { Fade, Slide } from "react-awesome-reveal";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
   const search: any = useSearch({ from: "__root__" });
@@ -20,6 +21,7 @@ export default function Home() {
     new Date(new Date().setDate(new Date().getDate() - 7)),
     "yyyy-MM-dd"
   );
+  const {t, i18n} = useTranslation()
 
   const latest = useInfiniteGet<Product>(
     "product/?created_at_from=" + sevenDaysAgo,
@@ -34,8 +36,6 @@ export default function Home() {
   const top = useInfiniteGet<Product>("product/?most_sold=true", search);
 
   const { username } = useUser();
-  console.log(latest?.data);
-
 
   return (
     <Loading loading={latest.isLoading}>
@@ -43,7 +43,7 @@ export default function Home() {
         {latest?.data?.length > 0 && (
           <div className="space-y-2 md:space-y-4">
             <h2 className="text-lg sm:text-xl md:text-2xl font-medium">
-              Haftaning eng yangi maxsulotlari
+            {t("haftaning eng yaxshi mahsulotlari")}
             </h2>
             <div className="grid gird-cols-2" >
             <Carousel
@@ -90,7 +90,7 @@ export default function Home() {
         {prices?.data?.length > 0 && (
           <div className="space-y-2 md:space-y-4">
             <h2 className="text-lg sm:text-xl md:text-2xl font-medium">
-              Chegirmadan bahramand bo'ling
+            {t("Chegirmadan bahramand bo'ling")}
             </h2>
             <div className="w-full grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">
               {prices?.data?.map((d, i: number) => (

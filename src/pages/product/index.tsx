@@ -25,7 +25,6 @@ export default function Product() {
     const { data: d, isLoading } = useGet<Product>(
         `product/` + params.product + "/"
     );
-    console.log(d);
     const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
     const isInBasket = useMemo(() => {

@@ -53,10 +53,10 @@ export default function AnimatedTabs({
         setValue?.(Number.isNaN(+value) ? value : +value);
       }}
     >
-      <div className="flex items-center w-full overflow-auto">
+      <div className="flex items-center max-w-full w-full overflow-auto">
         <TabsList
           className={cn(
-            "relative w-max flex items-center justify-between overflow-hidden",
+            "relative w-max flex items-center justify-between",
             fullWidth && "w-full grid grid-cols-2"
           )}
         >

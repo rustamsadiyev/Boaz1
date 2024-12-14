@@ -3,6 +3,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (min-width: 300px) and (max-width: 767px) {
+  .toast {
+      margin-bottom: 1px;
+      top: auto;
+      bottom: 50px;
+  }
+}
+
 @layer base {
 
   @layer base {

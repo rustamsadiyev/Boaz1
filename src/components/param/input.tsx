@@ -2,6 +2,7 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { ClassNameValue } from "tailwind-merge";
+import {useTranslation} from "react-i18next"
 
 export default function ParamInput({
   className,
@@ -13,7 +14,7 @@ export default function ParamInput({
   const params: any = useSearch({ from: "__root__" });
 
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+  const {t, i18n} = useTranslation()
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
 
@@ -77,7 +78,7 @@ export default function ParamInput({
   return (
     <>
       <Input
-        placeholder="جستجو..."
+        placeholder={t("qidirish")}
         type="search"
         className={`${className}`}
         fullWidth={fullWidth}

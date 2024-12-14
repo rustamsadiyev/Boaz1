@@ -29,13 +29,15 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { useState } from "react";
+import  {useTranslation} from "react-i18next";
 
 export default function Header() {
     const { store } = useStore<{ name: string }[]>("baskets");
     const confirm = useConfirm();
     const { username, is_admin, is_best_client } = useUser();
     const [showDiv, setShowDiv] = useState(false);
-    
+    const { t, i18n } = useTranslation();
+
     const { data: likeds } = useGet<{ product_ids: number[] }>(
         "user/favourite/?only_ids=true",
         undefined,
@@ -51,6 +53,11 @@ export default function Header() {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const pathname = useLocation().pathname;
+
+    const handleChangeLanguage = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedLanguage = event.target.value;
+        i18n.changeLanguage(selectedLanguage);
+    }
 
     async function logOut() {
         const isConfirmed = await confirm({
@@ -70,7 +77,7 @@ export default function Header() {
     <header className="flex flex-col backdrop-blur px-2 sm:px-4 xl:container mx-auto">
         <div className="flex items-center justify-between py-1.5 sm:py-3">
             <Link to="/">
-                <h2 className="hidden sm:inline text-2xl md:text-3xl xl:text-4xl font-semibold font-[Lobster] text-primary">
+                <h2 className=" sm:max-xmd:hidden hidden sm:inline text-2xl md:text-3xl xl:text-4xl font-semibold font-[Lobster] text-primary">
                     Boaz
                 </h2>
             </Link>
@@ -94,12 +101,13 @@ export default function Header() {
                                         icon={<List width={18} />}
                                         variant="ghost"
                                     />
+
                                 </Link>
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Kategoriyalar</p>
                             </TooltipContent>
-                        </Tooltip>
+                        </Tooltip>  
                     </TooltipProvider>
                     <TooltipProvider>
                         <Tooltip>
@@ -233,8 +241,17 @@ export default function Header() {
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
+                            
                         )
                     )}
+                    
+                    <select
+            onChange={handleChangeLanguage}
+            className="border border-gray-300 rounded-md py-1 text-gray-700 bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        >
+            <option value="uz">Uzb</option>
+            <option value="afg">دری</option>
+        </select>
                 </div>
             </div>
         </div>
