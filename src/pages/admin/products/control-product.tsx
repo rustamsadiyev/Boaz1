@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/custom/languageContext";
 import {
     Dialog,
     DialogContent,
@@ -27,71 +28,48 @@ interface thisProps {
     setOpen: (val: boolean) => void;
     current?: Product;
 }
+
 export default function ControlProduct({ open, setOpen, current }: thisProps) {
     const queryClient = useQueryClient();
     const search: any = useSearch({ from: "__root__" });
     const { data: vendors } = useGet<Category[]>("vendor/");
     const { data: category } = useGet<Category[]>("category/");
-    const { post, patch, isPending } = useRequest(
-        {
-            onSuccess: (data) => {
-                if (current?.id) {
-                    queryClient.setQueryData(
-                        ["product/"],
-                        (oldData: {
-                            pageParams: string[];
-                            pages: {
-                                next: string;
-                                previous: string;
-                                results: Product[];
-                            }[];
-                        }) => {
-                            if (!oldData) return oldData;
+    const { name } = useLanguage();
+    const { post, patch, isPending } = useRequest({
+        onSuccess: (data) => {
+            if (current?.id) {
+                queryClient.setQueryData(["product/"], (oldData: any) => {
+                    if (!oldData) return oldData;
 
-                            return {
-                                ...oldData,
-                                pages: oldData.pages.map((page) => ({
-                                    ...page,
-                                    results: page.results.map((product) =>
-                                        product.id === current.id
-                                            ? data
-                                            : product
-                                    ),
-                                })),
-                            };
-                        }
-                    );
-                } else {
-                    queryClient.setQueryData(
-                        ["product/"],
-                        (oldData: {
-                            pageParams: string[];
-                            pages: {
-                                next: string;
-                                previous: string;
-                                results: Product[];
-                            }[];
-                        }) => {
-                            if (!oldData) return oldData;
+                    return {
+                        ...oldData,
+                        pages: oldData.pages.map((page: { results: any[]; }) => ({
+                            ...page,
+                            results: page.results.map((product: { id: number; }) =>
+                                product.id === current.id ? data : product
+                            ),
+                        })),
+                    };
+                });
+            } else {
+                queryClient.setQueryData(["product/"], (oldData: any) => {
+                    if (!oldData) return oldData;
 
-                            return {
-                                ...oldData,
-                                pages: [
-                                    {
-                                        next: null,
-                                        previous: null,
-                                        results: [data],
-                                    },
-                                    ...oldData.pages,
-                                ],
-                            };
-                        }
-                    );
-                }
-            },
+                    return {
+                        ...oldData,
+                        pages: [
+                            {
+                                next: null,
+                                previous: null,
+                                results: [data],
+                            },
+                            ...oldData.pages,
+                        ],
+                    };
+                });
+            }
         },
-        { contentType: "multipart/form-data" }
-    );
+    }, { contentType: "multipart/form-data" });
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -110,14 +88,10 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
             await patch("product/" + current.id + "/", {
                 ...data,
                 discounted_price: data.discounted_price || undefined,
-                image1:
-                    typeof data.image1 === "string" ? undefined : data.image1,
-                image2:
-                    typeof data.image2 === "string" ? undefined : data.image2,
-                image3:
-                    typeof data.image3 === "string" ? undefined : data.image3,
-                image4:
-                    typeof data.image4 === "string" ? undefined : data.image4,
+                image1: typeof data.image1 === "string" ? undefined : data.image1,
+                image2: typeof data.image2 === "string" ? undefined : data.image2,
+                image3: typeof data.image3 === "string" ? undefined : data.image3,
+                image4: typeof data.image4 === "string" ? undefined : data.image4,
             });
             toast.success("Muvaffaqiyatli tahrirlandi");
             setOpen(false);
@@ -137,6 +111,15 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
         });
     }
 
+    const vendorOptions = vendors?.map(vendor => ({
+        name: vendor[name as keyof Category], // Assert that name is a key of Category
+        id: vendor.id
+    })) || [];
+    
+    const categoryOptions = category?.map(cat => ({
+        name: cat[name as keyof Category], // Assert that name is a key of Category
+        id: cat.id
+    })) || [];
     useEffect(() => {
         if (!open) {
             form.reset();
@@ -150,92 +133,27 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
             <DialogContent className="w-full max-w-3xl">
                 <DialogHeader>
                     <DialogTitle className="text-left">
-                        {current?.id
-                            ? current?.name + " ni tahrirlash"
-                            : "Yangi maxsulot"}
+                        {current?.id ? current?.name + " ni tahrirlash" : "Yangi maxsulot"}
                     </DialogTitle>
-                    <DialogDescription></DialogDescription>
                 </DialogHeader>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="flex flex-col gap-4 max-h-[80vh] overflow-y-auto px-0.5"
-                >
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 max-h-[80vh] overflow-y-auto px-0.5">
                     <div className="grid sm:grid-cols-2 gap-4">
-                        <FormInput
-                            methods={form}
-                            name="name"
-                            label="Nomi"
-                            hideError
-                        />
-                        <FormNumberInput
-                            methods={form}
-                            name="price"
-                            label="Narxi"
-                            thousandSeparator=" "
-                        />
-                        <FormNumberInput
-                            methods={form}
-                            name="discounted_price"
-                            label="Chegirma narx"
-                            thousandSeparator=" "
-                        />
-                        <FormNumberInput
-                            methods={form}
-                            name="stock"
-                            label="Miqdori"
-                        />
-                        <FormCombobox
-                            methods={form}
-                            name="category"
-                            label="Kategoriya"
-                            options={category}
-                        />
-                        <FormCombobox
-                            methods={form}
-                            name="vendor"
-                            label="Sotuvchi"
-                            options={vendors}
-                        />
-                        <FormTextarea
-                            methods={form}
-                            name="description"
-                            label="Ma'lumot"
-                            hideError
-                        />
-                        <span />
-                        <FormImageDrop
-                            methods={form}
-                            name="image1"
-                            label="Rasm"
-                        />
-                        <FormImageDrop
-                            methods={form}
-                            name="image2"
-                            label="Rasm"
-                        />
-                        <FormImageDrop
-                            methods={form}
-                            name="image3"
-                            label="Rasm"
-                        />
-                        <FormImageDrop
-                            methods={form}
-                            name="image4"
-                            label="Rasm"
-                        />
+                        <FormInput methods={form} name="name_uz" label="Nomi (Uzbek)" hideError />
+                        <FormInput methods={form} name="name_fa" label="Nomi (Farsi)" hideError />
+                        <FormNumberInput methods={form} name="price" label="Narxi" thousandSeparator=" " />
+                        <FormNumberInput methods={form} name="discounted_price" label="Chegirma narx" thousandSeparator=" " />
+                        <FormNumberInput methods={form} name="stock" label="Miqdori" />
+                        <FormCombobox methods={form} name="vendor" label="Firma" options={vendorOptions} />
+                        <FormCombobox methods={form} name="category" label="Kategoriya" options={categoryOptions} />
+                        {/* Description Fields for Uzbek and Farsi */}
+                        <FormTextarea methods={form} name="description_uz" label="Ma'lumot (Uzbek)" hideError />
+                        <FormTextarea methods={form} name="description_fa" label="Ma'lumot (Farsi)" hideError />
+                        <FormImageDrop methods={form} name="image1" label="Rasm" />
+                        <FormImageDrop methods={form} name="image2" label="Rasm" />
+                        <FormImageDrop methods={form} name="image3" label="Rasm" />
+                        <FormImageDrop methods={form} name="image4" label="Rasm" />
                     </div>
-                    <Button
-                        icon={
-                            current?.id ? (
-                                <Edit2 width={18} />
-                            ) : (
-                                <Plus width={18} />
-                            )
-                        }
-                        type="submit"
-                        loading={isPending}
-                        className="w-max ml-auto"
-                    >
+                    <Button icon={current?.id ? <Edit2 width={18} /> : <Plus width={18} />} type="submit" loading={isPending} className="w-max ml-auto">
                         {current?.id ? "Tahrirlash" : "Qo'shish"}
                     </Button>
                 </form>
@@ -245,75 +163,56 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
 }
 
 const FormSchema = z.object({
-    name: z.string({ message: "" }).min(1),
-    description: z.string({ message: "" }).min(1),
-    price: z
-        .string({ message: "" })
-        .min(3, { message: "Narxi juda kam" })
-        .or(z.number().min(3)),
-    discounted_price: z
-        .string({ message: "Narxi juda kam" })
-        .min(3, { message: "Narxi juda kam" })
-        .optional()
-        .or(z.number().min(3))
-        .optional()
-        .nullable(),
-    stock: z.string({ message: "" }).min(1).or(z.number().min(1)),
+    name_uz: z.string().min(1, { message: "Nomi (Uzbek) talab etiladi" }),
+    name_fa: z.string().min(1, { message: "Nomi (Farsi) talab etiladi" }),
+    description_uz: z.string().min(1, { message: "Tavsif (Uzbek) talab etiladi" }),
+    description_fa: z.string().min(1, { message: "Tavsif (Farsi) talab etiladi" }),
+    price: z.string().min(3, { message: "Narxi juda kam" }).or(z.number().min(3)),
+    discounted_price: z.string().min(3, { message: "Narxi juda kam" }).optional().or(z.number().min(3)).nullable(),
+    stock: z.string().min(1).or(z.number().min(1)),
     image1: z.union([
         z.string().url({ message: "Valid URL kiriting" }),
-        z
-            .instanceof(File, { message: "Rasm tanlang" })
-            .refine(
-                (file) => file.size <= MAX_FILE_SIZE,
-                "Rasm hajmi 5 MB dan kichik bo'lishi kerak"
-            )
-            .refine(
-                (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-                "Only .jpg, .jpeg, .png and .webp formats are supported"
-            ),
+        z.instanceof(File, { message: "Rasm tanlang" }).refine(
+            (file) => file.size <= MAX_FILE_SIZE,
+            "Rasm hajmi 5 MB dan kichik bo'lishi kerak"
+        ).refine(
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+            "Only .jpg, .jpeg, .png and .webp formats are supported"
+        ),
     ]),
     image2: z.union([
         z.string().url({ message: "Valid URL kiriting" }),
-        z
-            .instanceof(File, { message: "Rasm tanlang" })
-            .refine(
-                (file) => file.size <= MAX_FILE_SIZE,
-                "Rasm hajmi 5 MB dan kichik bo'lishi kerak"
-            )
-            .refine(
-                (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-                "Only .jpg, .jpeg, .png and .webp formats are supported"
-            ),
+        z.instanceof(File, { message: "Rasm tanlang" }).refine(
+            (file) => file.size <= MAX_FILE_SIZE,
+            "Rasm hajmi 5 MB dan kichik bo'lishi kerak"
+        ).refine(
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+            "Only .jpg, .jpeg, .png and .webp formats are supported"
+        ),
     ]),
     image3: z.union([
         z.string().url({ message: "Valid URL kiriting" }),
-        z
-            .instanceof(File, { message: "Rasm tanlang" })
-            .refine(
-                (file) => file.size <= MAX_FILE_SIZE,
-                "Rasm hajmi 5 MB dan kichik bo'lishi kerak"
-            )
-            .refine(
-                (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-                "Only .jpg, .jpeg, .png and .webp formats are supported"
-            ),
+        z.instanceof(File, { message: "Rasm tanlang" }).refine(
+            (file) => file.size <= MAX_FILE_SIZE,
+            "Rasm hajmi 5 MB dan kichik bo'lishi kerak"
+        ).refine(
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+            "Only .jpg, .jpeg, .png and .webp formats are supported"
+        ),
     ]),
     image4: z.union([
         z.string().url({ message: "Valid URL kiriting" }),
-        z
-            .instanceof(File, { message: "Rasm tanlang" })
-            .refine(
-                (file) => file.size <= MAX_FILE_SIZE,
-                "Rasm hajmi 5 MB dan kichik bo'lishi kerak"
-            )
-            .refine(
-                (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-                "Only .jpg, .jpeg, .png and .webp formats are supported"
-            ),
+        z.instanceof(File, { message: "Rasm tanlang" }).refine(
+            (file) => file.size <= MAX_FILE_SIZE,
+            "Rasm hajmi 5 MB dan kichik bo'lishi kerak"
+        ).refine(
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+            "Only .jpg, .jpeg, .png and .webp formats are supported"
+        ),
     ]),
     sold: z.string().or(z.number()).optional(),
-    category: z.number({ message: "" }).min(1),
-    vendor: z.number({ message: "" }).min(1),
+    category: z.number().min(1),
+    vendor: z.number().min(1),
 });
 
 const MAX_FILE_SIZE = 5000000;

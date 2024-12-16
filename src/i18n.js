@@ -6,16 +6,17 @@ import uzTranslation from "../public/locales/uz.json";
 import afgTranslation from "../public/locales/afg.json";
 
 i18n
-.use(Backend)
-.use(languageDetector)
-.use(initReactI18next)
-.init({
-    fallbackLng: "afg",
-    lng:"uz",
+  .use(Backend)
+  .use(languageDetector)
+  .use(initReactI18next)
+  .init({
+    fallbackLng: "uz",  // Default language if one is not found
+    lng: "uz",  // Default language set to 'uz'
     debug: true,
     resources: {
-        uz: { translation: uzTranslation },
-        afg: { translation: afgTranslation }
+      uz: { translation: uzTranslation },  // Uzbek translations
+      afg: { translation: afgTranslation },  // Farsi translations
     },
-})
+  });
+
 export default i18n;

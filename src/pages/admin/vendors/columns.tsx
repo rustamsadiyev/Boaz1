@@ -35,21 +35,28 @@ export const useColumns = ({
 
     return [
         {
-            header: () => <div className="text-center">№</div>, // Center the header
+            header: () => <div className="text-center">№</div>,
             accessorKey: "index",
             cell: ({ row }) => (
                 <div className="text-center">{row.index + 1}</div>
             ),
         },
         {
-            header: () => <div className="text-center">Nomi</div>, // Center the header
-            accessorKey: "name",
+            header: () => <div className="text-center">Nomi (Uzbek)</div>, // Center the header
+            accessorKey: "name_uz", // Using "name_uz"
             cell: ({ row }) => (
-                <div className="text-center">{row.original.name}</div>
+                <div className="text-center">{row.original.name_uz}</div> // Display "name_uz"
             ),
         },
         {
-            header: () => <div className="text-center"> </div>, // Center the header
+            header: () => <div className="text-center">Nomi (Farsi)</div>, // Header for Farsi name
+            accessorKey: "name_fa", // Using "name_fa"
+            cell: ({ row }) => (
+                <div className="text-center">{row.original.name_fa}</div> // Display "name_fa"
+            ),
+        },
+        {
+            header: () => <div className="text-center"> </div>, // Center the header for actions
             accessorKey: "actions",
             cell: ({ row }) => (
                 <div className="flex justify-center items-center space-x-2">

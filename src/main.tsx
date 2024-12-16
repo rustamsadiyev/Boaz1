@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./index.css";
 import { ConfirmProvider } from "./layouts/confirm";
 import './i18n.js';
+import { LanguageProvider } from "./components/custom/languageContext";
 
 const router = createRouter({
   routeTree,
@@ -25,11 +26,13 @@ const rootElement = document.getElementById("app")!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
-    <QueryClientProvider client={queryClient}>
+    <LanguageProvider>
+      <QueryClientProvider client={queryClient}>
       <ConfirmProvider>
         <RouterProvider router={router} />
       </ConfirmProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>
+    </LanguageProvider>
   );
 }

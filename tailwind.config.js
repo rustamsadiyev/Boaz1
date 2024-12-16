@@ -5,6 +5,13 @@ export const darkMode = ["class"];
 export const content = ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"];
 export const theme = {
   extend: {
+    zIndex: {
+      '60': '60',
+      '70': '70',
+      '80': '80',
+      '90': '90',
+      '100': '100',
+    },
     borderRadius: {
       lg: "var(--radius)",
       md: "calc(var(--radius) - 2px)",

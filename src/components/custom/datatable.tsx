@@ -11,7 +11,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-
+import { useTranslation } from "react-i18next"
 import {
     Table,
     TableBody,
@@ -107,6 +107,7 @@ export function DataTable({
         manualPagination: !!paginationProps?.totalPages || !!cursorPagination || viewAll || !!limitOffsetPagination,
     })
 
+    const {t} = useTranslation();
     return (
         <main className="w-full">
               {!!head && <div className="px-4 py-4">{head}</div>}
@@ -201,7 +202,7 @@ export function DataTable({
                                     colSpan={columns?.length}
                                     className="h-24 text-center"
                                 >
-                                    Mavjud emas
+                                    {t("mavjud emas")}
                                 </TableCell>
                             </TableRow>
                         }

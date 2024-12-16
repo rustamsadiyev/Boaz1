@@ -112,7 +112,7 @@ export default function Home() {
                   variant="ghost"
                   className="!bg-background"
                 >
-                  Yana ko'rsatish +10
+                  {t("yana ko'rsatish")} +10
                 </Button>
               </div>
             )}
@@ -121,7 +121,7 @@ export default function Home() {
         {top?.data?.length > 0 && (
           <div className="space-y-2 md:space-y-4">
             <h2 className="text-lg sm:text-xl md:text-2xl font-medium">
-              Top maxsulotlar
+              {t("top mahsulotlar")}
             </h2>
             <div className="w-full grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">
               {top?.data?.map((d, i: number) => (
@@ -143,7 +143,7 @@ export default function Home() {
                   variant="ghost"
                   className="!bg-background"
                 >
-                  Yana ko'rsatish +10
+                  {t("yana ko'rsatish")} +10
                 </Button>
               </div>
             )}

@@ -2,6 +2,7 @@ import { useInfiniteGet } from "@/hooks/useInfiniteGet";
 import Loading from "@/layouts/loading";
 import AdminOrderCard from "./admin-order-card";
 import { useSearch } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 export default function Orders() {
     const search: any = useSearch({ from: "__root__" });
@@ -13,10 +14,12 @@ export default function Orders() {
         cart: { id: number; order: 1; product: Product; quantity: number }[];
     }>("order/?pending=true", search);
 
+    const { t } = useTranslation();
+
     return (
         <div className="pt-4">
             <h2 className="text-lg sm:text-xl md:text-2xl font-medium border-b pb-2 mb-4">
-                Buyurtmalar
+                {t("Buyurtmalar")}
             </h2>
             <Loading loading={isLoading}>
                 <div className=" space-y-4 sm:max-md:grid sm:max-md:grid-cols-1 sm:max-md:gap-4 sm:max-md:p-2">

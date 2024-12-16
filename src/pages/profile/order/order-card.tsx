@@ -1,26 +1,19 @@
+import React, { useRef } from "react";
+import { useLanguage } from "@/components/custom/languageContext";  // Assuming useLanguage is a custom hook for language handling
+import { useTranslation } from "react-i18next";
 import Image from "@/components/custom/image";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-} from "@/components/ui/carousel";
+import { Trash2 } from "lucide-react";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useRequest } from "@/hooks/useRequest";
-import { formatMoney } from "@/lib/format-money";
 import { useQueryClient } from "@tanstack/react-query";
+import { formatMoney } from "@/lib/format-money";
 import { useSearch } from "@tanstack/react-router";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
-import { Trash2 } from "lucide-react";
-import { useRef } from "react";
 import { toast } from "sonner";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 
 export default function OrderCard({
     p,
@@ -36,6 +29,8 @@ export default function OrderCard({
 }) {
     const plugin = useRef(Autoplay({ delay: 3000 }));
     const fade = useRef(Fade());
+    const { t } = useTranslation();
+    const { name } = useLanguage(); // Assuming this provides the current language (e.g., 'uz', 'fa')
 
     const confirm = useConfirm();
     const search: any = useSearch({ from: "__root__" });
@@ -59,6 +54,15 @@ export default function OrderCard({
         }
     }
 
+    const statuses = {
+        0: `${t("To'lov qilinmagan")}`,
+        1: `${t("Faol")}`,
+        2: `${t("Yetkazilmoqda")}`,
+        3: `${t("bekor qilingan")}`,
+        4: `${t("Yetkazilgan")}`,
+    };
+
+
     return (
         <Accordion
             type="single"
@@ -67,13 +71,13 @@ export default function OrderCard({
         >
             <div className="flex items-center justify-between pb-4">
                 <p>
-                    Holat:{" "}
+                    {t("Holat")}:{" "}
                     <span className="text-foreground font-semibold">
                         {statuses[p.status as 0 | 1 | 2 | 3 | 4]}
                     </span>
                 </p>
                 <p>
-                    Yetkazilish sanasi:{" "}
+                    {t("Yetkazilish sanasi")}:{" "}
                     <span className="text-foreground font-semibold">
                         {p.updated_at.split("T")[0]}
                     </span>
@@ -84,13 +88,13 @@ export default function OrderCard({
                     <AccordionTrigger>
                         <div className="flex flex-col items-start gap-2">
                             <p className="font-normal text-muted-foreground">
-                                Buyurtma id raqami{" "}
+                                {t("Buyurtma id raqami")}:{" "}
                                 <span className="text-foreground font-semibold">
                                     {c.id}
                                 </span>
                             </p>
                             <p className="font-normal text-muted-foreground">
-                                Soni:{" "}
+                                {t("Soni")}:{" "}
                                 <span className="text-foreground font-semibold">
                                     {c.quantity}
                                 </span>
@@ -105,12 +109,7 @@ export default function OrderCard({
                                     plugins={[plugin.current, fade.current]}
                                 >
                                     <CarouselContent>
-                                        {[
-                                            c.product.image1,
-                                            c.product.image2,
-                                            c.product.image3,
-                                            c.product.image4,
-                                        ]?.map((i) => (
+                                        {[c.product.image1, c.product.image2, c.product.image3, c.product.image4].map((i) => (
                                             <CarouselItem key={i}>
                                                 <Image
                                                     src={i}
@@ -125,13 +124,15 @@ export default function OrderCard({
                                 <div className="flex flex-col gap-2 items-start">
                                     <div className="flex items-center gap-2 text-base">
                                         <p className="font-semibold text-muted-foreground">
-                                            Nomi:{" "}
+                                            {t("Nomi")}:{" "}
                                         </p>
-                                        <p>{c.product?.name}</p>
+                                        <p>
+                                            {name=== "name_uz" ? c.product.name_uz : name === "name_fa" ? c.product.name_fa : c.product.name}
+                                        </p>
                                     </div>
                                     <div className="flex items-center gap-2 text-base">
                                         <p className="font-semibold text-muted-foreground">
-                                            Narxi:{" "}
+                                            {t("Narxi")}:{" "}
                                         </p>
                                         <p>
                                             {formatMoney(
@@ -141,17 +142,23 @@ export default function OrderCard({
                                                 true
                                             )}
                                         </p>
-                                        
-                                    </div>      
-                            <p className="font-semibold text-muted-foreground">
-                                Mijoz:{" "}
-                                <span className="text-foreground font-semibold">
-                                    {p.user?.full_name}
-                                </span>
-                            </p>
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-2 text-base">
+                                        <p className="font-semibold text-muted-foreground">
+                                            {t("Mijoz")}:{" "}
+                                        </p>
+                                        <p>
+                                        {p.user.full_name ? p.user.full_name : p.user.username}
+                                        </p>
+                                    </div>          
                                     <div className="flex items-center gap-2">
-                                        <p className="font-semibold text-muted-foreground" >qo'shimcha ma'lumot:</p>
-                                        <p>{c.product?.description}</p>
+                                        <p className="font-semibold text-muted-foreground">
+                                            {t("Qo'shimcha ma'lumot")}:{" "}
+                                        </p>
+                                        <p>
+                                            {name === "name_uz" ? c.product.description_uz : name === "name_fa" ? c.product.description_fa : c.product.description}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -168,14 +175,5 @@ export default function OrderCard({
                 </AccordionItem>
             ))}
         </Accordion>
-
     );
 }
-
-const statuses = {
-    0: "To'lov qilinmagan",
-    1: "Faol",
-    2: "Yetkazilmoqda",
-    3: "Bekor qilingan",
-    4: "Yetkazilgan",
-};

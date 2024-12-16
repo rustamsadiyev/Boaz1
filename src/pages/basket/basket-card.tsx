@@ -1,3 +1,4 @@
+import { useLanguage } from "@/components/custom/languageContext";
 import { Card } from "@/components/ui/card";
 import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
 import {
@@ -20,8 +21,8 @@ import { Input } from "@/components/ui/input";
 export default function BasketCard({ product }: { product: Product }) {
   const plugin = useRef(Autoplay({ delay: 1000 }));
   const fade = useRef(Fade());
-
   const { store, setStore } = useStore<Product[]>("baskets");
+  const { name } = useLanguage(); 
 
   const [inputValue, setInputValue] = useState(product.count || 1);
 
@@ -65,6 +66,8 @@ export default function BasketCard({ product }: { product: Product }) {
     setStore(newStore);
   };
 
+  const productName = name === 'name_uz' ? product.name_uz : product.name_fa;
+
   return (
     <Card key={product.id} className="p-4">
       <div className="flex items-center gap-4 w-full justify-between">
@@ -73,12 +76,7 @@ export default function BasketCard({ product }: { product: Product }) {
           plugins={[plugin.current, fade.current]}
         >
           <CarouselContent>
-            {[
-              product.image1,
-              product.image2,
-              product.image3,
-              product.image4,
-            ]?.map((m) => (
+            {[product.image1, product.image2, product.image3, product.image4].map((m) => (
               <CarouselItem key={m} className="relative">
                 <SeeInView url={m}>
                   <CustomImage
@@ -88,20 +86,19 @@ export default function BasketCard({ product }: { product: Product }) {
                     width={120}
                     onMouseEnter={() => plugin.current.play()}
                     onMouseLeave={() => plugin.current.stop()}
-                    className="rounded-md  sm:w-max"
+                    className="rounded-md sm:w-max"
                   />
                 </SeeInView>
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
-        <div className="flex items-end sm:items-center justify-between w-full gap-x-4 gap-y-2 flex-col sm:flex-row flex-wrap
-        xsm:max-sm:items-start">
-          <h3 className="text-sm sm:text-base sm:max-w-[10vh] font-medium">{product.name}</h3>
+        <div className="flex items-end sm:items-center justify-between w-full gap-x-4 gap-y-2 flex-col sm:flex-row flex-wrap xsm:max-sm:items-start">
+          <h3 className="text-sm sm:text-base sm:max-w-[10vh] font-medium">{productName}</h3>
           <p className="text-muted-foreground text-sm sm:text-base">
             {formatMoney(product.price, "", true)}
           </p>
-          <div className="flex xsm:max-sm:max-w-[21vh] items-center gap-2 sm:max-md:gap-1 xsm:max-sm:gap-1 ">
+          <div className="flex xsm:max-sm:max-w-[21vh] items-center gap-2 sm:max-md:gap-1 xsm:max-sm:gap-1">
             <Button
               variant="outline"
               size="icon"

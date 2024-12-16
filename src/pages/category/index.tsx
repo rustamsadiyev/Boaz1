@@ -7,6 +7,7 @@ import { useSearch } from "@tanstack/react-router";
 import Filter from "./filter";
 import { CategoryDrawer } from "./category-drawer";
 import { Fade } from "react-awesome-reveal";
+import { useTranslation } from "react-i18next";
 
 export default function Category() {
     const search: any = useSearch({ from: "__root__" });
@@ -16,6 +17,7 @@ export default function Category() {
             category: search.category,
             vendor: search.vendor == "all" ? undefined : search.vendor,
         });
+        const {t} = useTranslation()
 
     const { username } = useUser();
     return (
@@ -26,7 +28,7 @@ export default function Category() {
             <div className="space-y-6 w-full md:ml-64 md:pl-4">
                 <div className="flex items-center justify-between  border-b pb-2">
                     <h2 className="text-lg sm:text-xl md:text-2xl font-medium">
-                        Kategoriyalar
+                        {t("Kategoriyalar")}
                     </h2>
                     <CategoryDrawer />
                 </div>

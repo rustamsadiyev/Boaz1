@@ -1,4 +1,4 @@
-import FormInput from "@/components/form/input";
+import FormInput from "@/components/form/input"; 
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,7 +23,7 @@ const ControlName = ({
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  current: Category| undefined;
+  current: Category | undefined;
 }) => {
   const queryClient = useQueryClient();
 
@@ -32,17 +32,14 @@ const ControlName = ({
       if (current?.id) {
         queryClient.setQueryData(
           ["category/"],
-          (oldData: Category[]) => oldData?.map((o) =>
-            o.id == current?.id
-              ? res
-              : o
-          )
+          (oldData: Category[]) =>
+            oldData?.map((o) => (o.id == current?.id ? res : o))
         );
         toast.success("Muvaffaqiyatli tahrirlandi");
       } else {
         queryClient.setQueryData(
           ["category/"],
-          (oldData: Category[]) => [...oldData,res],
+          (oldData: Category[]) => [...oldData, res]
         );
         toast.success("Muvaffaqiyatli tahrirlandi");
       }
@@ -54,25 +51,31 @@ const ControlName = ({
     resolver: zodResolver(formSchema),
     disabled: isPending,
     values: {
-      ...current,
+      name_fa: current?.name_fa || "",
+      name_uz: current?.name_uz || "",
     } as any,
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    const formData = {
+      name_fa: data.name_fa,
+      name_uz: data.name_uz,
+    };
     if (current?.id) {
-      await patch(`category/${current?.id}/`, {
-        ...data,
-      });
+      await patch(`category/${current?.id}/`, formData);
     } else {
-      await post("category/", { ...data });
+      await post("category/", formData);
     }
   }
 
   useEffect(() => {
-    if(!open){
-      form.reset()
+    if (!open) {
+      form.reset({
+        name_fa: current?.name_fa || "",
+        name_uz: current?.name_uz || "",
+      });
     }
-  }, [open]);
+  }, [open, current, form]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -89,7 +92,8 @@ const ControlName = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
-          <FormInput methods={form} name="name" label="Nomi" />
+          <FormInput methods={form} name="name_fa" label="Nomi (Dari)" />
+          <FormInput methods={form} name="name_uz" label="Nomi (Uzbek)" />
           <div className="flex gap-4 justify-end">
             <Button loading={isPending}>Saqlash</Button>
             <Button
@@ -110,7 +114,10 @@ const ControlName = ({
 export default ControlName;
 
 const formSchema = z.object({
-  name: z
-    .string({ message: "Nomi kiritilishi shart" })
-    .min(1, { message: "Nomi kiritilishi shart" }),
+  name_fa: z
+    .string({ message: "Nomi kiritilishi shart (Dari)" })
+    .min(1, { message: "Nomi kiritilishi shart (Dari)" }),
+  name_uz: z
+    .string({ message: "Nomi kiritilishi shart (Uzbek)" })
+    .min(1, { message: "Nomi kiritilishi shart (Uzbek)" }),
 });

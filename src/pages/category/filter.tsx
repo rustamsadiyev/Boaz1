@@ -8,15 +8,20 @@ import { useGet } from "@/hooks/useGet";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { Check } from "lucide-react";
+import { useLanguage } from "@/components/custom/languageContext"; // Import the useLanguage hook
 
 export default function Filter() {
     const navigate = useNavigate();
     const search: any = useSearch({ from: "__root__" });
 
+    const { name } = useLanguage(); // Get the current selected language from context
+
+    // Fetch categories
     const { data } = useGet<{
         id: number;
-        name: string;
-        vendors: { id: number; name: string; image: string | null }[];
+        name_fa: string;
+        name_uz: string;
+        vendors: { id: number; name_fa: string; name_uz: string; image: string | null }[];
     }[]>("https://ecommerce-api.loongair.uz/api/v1/categories/");
 
     return (
@@ -42,12 +47,11 @@ export default function Filter() {
                         <AccordionTrigger
                             className="text-lg font-semibold text-gray-800 py-3 px-6 rounded-md bg-gray-100 hover:bg-gray-200 focus:outline-none"
                         >
-                            {category.name}
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-1">
-                        {category.vendors?.map((vendor) => 
-                            (vendor.id === category.id && (vendor.name || vendor.image)) || 
-                            (vendor.id !== category.id && (vendor.name || vendor.image)) ? (
+                            {/* Display category name based on the selected language */}
+                            {name === "name_uz" ? category.name_uz : name === "name_fa" ? category.name_fa : category.name_uz}
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-1">
+                            {category.vendors?.map((vendor) => (
                                 <Link
                                     search={{
                                         ...search,
@@ -59,7 +63,10 @@ export default function Filter() {
                                     }}
                                     key={vendor.id}
                                 >
-                                    <span className="text-sm">{vendor.name}</span>
+                                    <span className="text-sm">
+                                        {/* Display vendor name based on the selected language */}
+                                        {name === "name_uz" ? vendor.name_uz : name === "name_fa" ? vendor.name_fa : vendor.name_uz}
+                                    </span>
                                     <Check
                                         width={14}
                                         className={cn(
@@ -68,11 +75,10 @@ export default function Filter() {
                                         )}
                                     />
                                 </Link>
-                            ) : null
-                        )}
-                    </AccordionContent>
-                </AccordionItem>
-            ))}
+                            ))}
+                        </AccordionContent>
+                    </AccordionItem>
+                ))}
         </Accordion>
     );
 }

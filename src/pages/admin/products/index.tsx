@@ -6,6 +6,7 @@ import Loader from "@/components/ui/loader";
 import Loading from "@/layouts/loading";
 import AdminProductCard from "./admin-product-card";
 import ControlProduct from "./control-product";
+import { useTranslation } from "react-i18next";
 
 export default function Products() {
   const [open, setOpen] = useState(false);
@@ -13,6 +14,8 @@ export default function Products() {
 
   const { data, ref, isFetchingNextPage, isLoading } =
     useInfiniteGet<Product>("product/");
+
+  const { t } = useTranslation();
 
   return (
     <>
@@ -24,7 +27,7 @@ export default function Products() {
             setCurrent({} as Product);
           }}
         >
-          Maxsulot
+        
         </Button>
         <Loading loading={isLoading}>
           <div className="w-full grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,_minmax(14rem,_auto))] gap-2 sm:gap-4">

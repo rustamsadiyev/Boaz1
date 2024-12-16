@@ -21,6 +21,8 @@ import Fade from "embla-carousel-fade";
 import { Heart, ShoppingCart } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/components/custom/languageContext";
 
 export default function ProductCard({
     p,
@@ -38,9 +40,10 @@ export default function ProductCard({
         undefined,
         { enabled: !!localStorage.getItem("token") }
     );
+    const { t } = useTranslation();
+    const { name: selectedLanguage } = useLanguage(); // Get the selected language from context
 
     const { post, isPending, remove } = useRequest();
-
     const plugin = useRef(Autoplay({ delay: 1000, playOnInit: false }));
     const fade = useRef(Fade());
 
@@ -56,7 +59,7 @@ export default function ProductCard({
     const toggleLiked = () => {
         if (isLiked) {
             toast.promise(remove("user/favourite/", { product_id: p.id }), {
-                loading: "Sevimlilardan olib tashlanmoqda...",
+                loading: `${t("Sevimlilardan olib tashlanmoqda...")}`,
                 success: () => {
                     queryClient.setQueryData(
                         ["user/favourite/"],
@@ -107,6 +110,11 @@ export default function ProductCard({
         baskets.setStore(updatedBaskets || []);
         !isInBasket && toast.success(p.name + " savatchaga qo'shildi");
     };
+
+    // Determine which name and description to show based on the selected language
+    const productName = selectedLanguage === "name_uz" ? p.name_uz : p.name_fa;
+    const productDescription =
+        selectedLanguage === "name_uz" ? p.description_uz : p.description_fa;
 
     return (
         <Card className="overflow-hidden relative group" key={p.id}>
@@ -162,10 +170,10 @@ export default function ProductCard({
                 <div className="p-2 sm:p-3">
                     <Link to={`/products/${p.id}`}>
                         <h2 className="text-sm sm:text-base line-clamp-1">
-                            {p.name}
+                            {productName}
                         </h2>
                         <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">
-                            {p.description}
+                            {productDescription}
                         </p>
                         <p className="text-xs sm:text-sm text-muted-foreground pt-2">
                             Omborda:{" "}

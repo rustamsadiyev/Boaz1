@@ -1,3 +1,4 @@
+import LanguageSwitcher from "../custom/useLanguage";
 import {
     List,
     LogIn,
@@ -28,14 +29,12 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useState } from "react";
 import  {useTranslation} from "react-i18next";
 
 export default function Header() {
     const { store } = useStore<{ name: string }[]>("baskets");
     const confirm = useConfirm();
     const { username, is_admin, is_best_client } = useUser();
-    const [showDiv, setShowDiv] = useState(false);
     const { t, i18n } = useTranslation();
 
     const { data: likeds } = useGet<{ product_ids: number[] }>(
@@ -73,7 +72,7 @@ export default function Header() {
 
     if (pathname === "/auth") return null;
     return (
-<div className="overflow-hidden bg-background/60 sticky top-0 left-0 right-0 z-40">
+<div className="bg-background/60 sticky top-0 left-0 right-0 z-40">
     <header className="flex flex-col backdrop-blur px-2 sm:px-4 xl:container mx-auto">
         <div className="flex items-center justify-between py-1.5 sm:py-3">
             <Link to="/">
@@ -105,7 +104,7 @@ export default function Header() {
                                 </Link>
                             </TooltipTrigger>
                             <TooltipContent>
-                                <p>Kategoriyalar</p>
+                                <p>{t("Kategoriyalar")}</p>
                             </TooltipContent>
                         </Tooltip>  
                     </TooltipProvider>
@@ -245,13 +244,7 @@ export default function Header() {
                         )
                     )}
                     
-                    <select
-            onChange={handleChangeLanguage}
-            className="border border-gray-300 rounded-md py-1 text-gray-700 bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        >
-            <option value="uz">Uzb</option>
-            <option value="afg">دری</option>
-        </select>
+<LanguageSwitcher></LanguageSwitcher>
                 </div>
             </div>
         </div>

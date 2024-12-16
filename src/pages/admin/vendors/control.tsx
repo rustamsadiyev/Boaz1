@@ -55,7 +55,8 @@ const ControlName = ({
 
     async function onSubmit(data: z.infer<typeof formSchema>) {
         const formData = new FormData();
-        formData.append("name", data.name);
+        formData.append("name_fa", data.name_fa);
+        formData.append("name_uz", data.name_uz);
         if (current?.id) {
             await patch(`vendor/${current?.id}/`, formData, {
                 contentType: "multipart/form-data",
@@ -90,8 +91,8 @@ const ControlName = ({
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="flex flex-col gap-4"
                 >
-                    {" "}
-                    <FormInput methods={form} name="name" label="Nomi" />
+                    <FormInput methods={form} name="name_fa" label="Nomi (Dari)" />
+                    <FormInput methods={form} name="name_uz" label="Nomi (Uzbek)" />
                     <div className="flex gap-4 justify-end">
                         <Button loading={isPending}>Saqlash</Button>
                         <Button
@@ -112,7 +113,10 @@ const ControlName = ({
 export default ControlName;
 
 const formSchema = z.object({
-    name: z
-        .string({ message: "Nomi kiritilishi shart" })
-        .min(1, { message: "Nomi kiritilishi shart" }),
+    name_fa: z
+        .string({ message: "Nomi kiritilishi shart (Dari)" })
+        .min(1, { message: "Nomi kiritilishi shart (Dari)" }),
+    name_uz: z
+        .string({ message: "Nomi kiritilishi shart (Uzbek)" })
+        .min(1, { message: "Nomi kiritilishi shart (Uzbek)" }),
 });

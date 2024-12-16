@@ -17,15 +17,16 @@ import { ShoppingCart } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/components/custom/languageContext"; // Assuming you have a useLanguage hook or context
 
 export default function Product() {
     const params = useParams({ from: "/_main/products/$product" });
     const { store, setStore } = useStore<Product[]>("baskets");
 
-    const { data: d, isLoading } = useGet<Product>(
-        `product/` + params.product + "/"
-    );
+    const { data: d, isLoading } = useGet<Product>(`product/` + params.product + "/");
     const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
+
+    const { name } = useLanguage(); // Assuming `useLanguage` returns the current language (either 'uz' or 'fa')
 
     const isInBasket = useMemo(() => {
         return store?.some((b) => b.id === d?.id);
@@ -39,8 +40,13 @@ export default function Product() {
             : [...(store || []), { ...d, count: 1 }];
 
         setStore(updatedBaskets || []);
-        !isInBasket && toast.success(d?.name + " savatchaga qo'shildi");
+        !isInBasket && toast.success(d?.name_uz + " savatchaga qo'shildi");
     };
+
+    // Conditionally rendering name and description based on selected language
+    const productName = name === 'name_uz' ? d?.name_uz : d?.name_fa;
+    const productDescription = name === 'name_fa' ? d?.description_uz : d?.description_fa;
+
     return (
         <Loading loading={isLoading}>
             <div className="flex flex-col md:flex-row gap-8 w-full">
@@ -53,20 +59,18 @@ export default function Product() {
                         }}
                     >
                         <CarouselContent>
-                            {[d?.image1, d?.image2, d?.image3, d?.image4]?.map(
-                                (m) => (
-                                    <CarouselItem key={m} className="relative">
-                                        <CustomImage
-                                            src={m}
-                                            alt="product image"
-                                            height={300}
-                                            contain
-                                            width={"100%"}
-                                            className="mix-blend-multiply"
-                                        />
-                                    </CarouselItem>
-                                )
-                            )}
+                            {[d?.image1, d?.image2, d?.image3, d?.image4]?.map((m) => (
+                                <CarouselItem key={m} className="relative">
+                                    <CustomImage
+                                        src={m}
+                                        alt="product image"
+                                        height={300}
+                                        contain
+                                        width={"100%"}
+                                        className="mix-blend-multiply"
+                                    />
+                                </CarouselItem>
+                            ))}
                         </CarouselContent>
                         <CarouselPrevious className="absolute top-1/2 left-2 -translate-y-1/2" />
                         <CarouselNext className="absolute top-1/2 right-2 -translate-y-1/2" />
@@ -75,14 +79,12 @@ export default function Product() {
                 <div className="flex flex-col justify-between items-start gap-6 md:gap-8 w-full">
                     <div className="space-y-4">
                         <h2 className="text-lg sm:text-xl md:text-2xl font-medium border-b pb-2">
-                            {d?.name}
+                            {productName} {/* Displaying the correct name based on language */}
                         </h2>
                         <div className="flex items-center gap-4 w-full justify-between">
                             <div className="flex items-center gap-2">
                                 <h2 className="text-base sm:text-lg md:text-xl font-medium">
-                                    {formatMoney(
-                                        d?.discounted_price || d?.price
-                                    )}
+                                    {formatMoney(d?.discounted_price || d?.price)}
                                 </h2>
                                 {d?.discounted_price && (
                                     <p className="text-sm sm:text-base md:text-lg line-through">
@@ -92,7 +94,7 @@ export default function Product() {
                             </div>
                         </div>
                         <p className="text-sm sm:text-base md:text-lg text-muted-foreground">
-                            {d?.description}
+                            {productDescription} {/* Displaying the correct description based on language */}
                         </p>
                     </div>
                     <div className="relative w-max">

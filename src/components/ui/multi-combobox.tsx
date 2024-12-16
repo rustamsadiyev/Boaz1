@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/popover"
 import { CheckIcon, ChevronsUpDown, X } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 export function MultiCombobox({
     options,
@@ -33,7 +34,8 @@ export function MultiCombobox({
     isError?: boolean
     returnValue?: "id" | "name"
 }) {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
+    const {t}= useTranslation();
 
     const handleSelect = (selectedItem: {
         name: string | number
@@ -90,7 +92,7 @@ export function MultiCombobox({
                         </span>
                     )}
                     <CommandList>
-                        <CommandEmpty>Mavjud emas</CommandEmpty>
+                        <CommandEmpty>{t("mavjud emas")}</CommandEmpty>
                         <CommandGroup className="!overflow-y-scroll">
                             {sortedData?.map((d, i) => (
                                 <CommandItem

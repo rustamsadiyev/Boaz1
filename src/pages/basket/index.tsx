@@ -5,10 +5,13 @@ import BasketCard from "./basket-card";
 import { toast } from "sonner";
 import { useRequest } from "@/hooks/useRequest";
 import { Fade } from "react-awesome-reveal";
+import { useTranslation } from "react-i18next";
 
 export default function Basket() {
   const { store, setStore } = useStore<Product[]>("baskets");
   const {post,isPending}=useRequest();
+
+  const { t } = useTranslation();
 
   const totalPrice =
     store?.reduce((acc, item) => acc + item.price * (item.count || 1), 0) || 0;
@@ -23,8 +26,8 @@ export default function Basket() {
   return (
     <div className="space-y-6 overflow-hidden ">
       <h2 className="text-lg sm:text-xl md:text-2xl font-medium border-b pb-2">
-        Savatingiz {" "}
-       {!!store?.length? <span className="text-muted-foreground">{store?.length} maxsulot</span>:"bo'sh"}
+        {t("savatingiz")} {" "}
+       {!!store?.length? <span className="text-muted-foreground">{store?.length} {t("maxsulot")}</span>:`${t("bo'sh")}`}
       </h2>
 
       <div className="flex flex-col gap-4">
@@ -41,7 +44,7 @@ export default function Basket() {
               Total: ${formatMoney(totalPrice.toFixed(2))}
             </div>
             <Button onClick={handleSell} size="lg" loading={isPending}>
-              Buyurtmani amalga oshirish
+              {t("Buyurtmani amalga oshirsh")}
             </Button>
         </div>
       )}

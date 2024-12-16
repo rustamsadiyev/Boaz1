@@ -15,6 +15,7 @@ import Fade from "embla-carousel-fade";
 import { Edit2, Trash2 } from "lucide-react";
 import { useRef } from "react";
 import { toast } from "sonner";
+import { useLanguage } from "@/components/custom/languageContext"; // Import the useLanguage hook
 
 export default function AdminProductCard({
     p,
@@ -30,6 +31,8 @@ export default function AdminProductCard({
     const confirm = useConfirm();
     const { remove, isPending } = useRequest();
     const queryClient = useQueryClient();
+
+    const { name } = useLanguage(); // Get the current selected language from context
 
     async function deleteProduct() {
         const isConfirmed = await confirm({
@@ -70,6 +73,7 @@ export default function AdminProductCard({
             });
         }
     }
+
     return (
         <Card className="overflow-hidden">
             <CardContent className="p-0">
@@ -96,10 +100,12 @@ export default function AdminProductCard({
                 </Carousel>
                 <div className="p-3">
                     <h2 className="text-sm sm:text-base font-medium">
-                        {p.name}
+                        {/* Dynamically display product name based on language */}
+                        {name === "name_uz" ? p.name_uz : name === "name_fa" ? p.name_fa : p.name_uz}
                     </h2>
                     <p className="text-xs sm:text-sm text-muted-foreground">
-                        {p.description}
+                        {/* Dynamically display product description based on language */}
+                        {name === "name_uz" ? p.description_uz : name === "name_fa" ? p.description_fa : p.description_uz}
                     </p>
                     <p className="text-xs sm:text-sm text-muted-foreground pt-2">
                         Omborda:{" "}

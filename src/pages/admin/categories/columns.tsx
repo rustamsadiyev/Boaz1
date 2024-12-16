@@ -35,14 +35,24 @@ export const useColumns = ({
     {
       id: "index", // Added id for this column
       header: () => <div className="text-center">№</div>,
-      cell: ({ row }) => (row.original.name ? row.index + 1 : ""),
+      cell: ({ row }) => (
+        <div className="text-center">{row.index + 1}</div>
+      ),
     },
     {
-      id: "name", // Added id for this column
-      header: () => <div className="text-center">Nomi</div>,
-      accessorKey: "name",
+      id: "name_uz", // Added id for name_uz
+      header: () => <div className="text-center">Nomi (Uzbek)</div>,
+      accessorKey: "name_uz",
       cell: ({ row }) => (
-        <div className="text-center">{row.original.name}</div>
+        <div className="text-center">{row.original.name_uz}</div>
+      ),
+    },
+    {
+      id: "name_fa", // Added id for name_fa
+      header: () => <div className="text-center">Nomi (Russian)</div>,
+      accessorKey: "name_fa",
+      cell: ({ row }) => (
+        <div className="text-center">{row.original.name_fa}</div>
       ),
     },
     {
