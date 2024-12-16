@@ -60,7 +60,7 @@ export default function Header() {
 
     async function logOut() {
         const isConfirmed = await confirm({
-            title: "Tizimdan chiqmoqchimisiz?",
+            title: `${t("Tizimdan chiqmoqchimisiz?")}`,
         });
         if (isConfirmed) {
             localStorage.removeItem("token");
@@ -213,7 +213,7 @@ export default function Header() {
                                                 className="cursor-pointer flex items-center gap-2 !text-red-500"
                                                 onClick={logOut}
                                             >
-                                                <LogOut width={16} /> Tizimdan chiqish
+                                                <LogOut width={16} /> {t("Tizimdan chiqish")}
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -236,7 +236,7 @@ export default function Header() {
                                         </Link>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>Kirish</p>
+                                        <p>{t("kirish")}</p>
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>

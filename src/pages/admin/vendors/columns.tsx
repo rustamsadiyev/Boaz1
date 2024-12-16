@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export const useColumns = ({
     onEdit,
@@ -14,20 +15,22 @@ export const useColumns = ({
     const queryClient = useQueryClient();
     const confirm = useConfirm();
 
+    const { t } = useTranslation();
+
     async function onDelete(id: number) {
         const isConfirmed = await confirm({
-            title: "O'chirilsinmi?",
+            title: `${t("O'chirilsinmi")}?`,
         });
         if (isConfirmed) {
             toast.promise(http.delete("vendor/" + id + "/"), {
-                loading: "O'chirilmoqda",
+                loading: `${t("O'chirilmoqda")}`,
                 success: () => {
                     queryClient.setQueryData(
                         ["vendor/"],
                         (oldData: Category[]) =>
                             oldData?.filter((f) => f.id !== id)
                     );
-                    return "Muvaffaqiyatli o'chirildi";
+                    return `${t("muvaffaqiyatli o'chirildi")}`;
                 },
             });
         }

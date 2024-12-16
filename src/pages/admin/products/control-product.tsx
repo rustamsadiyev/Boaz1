@@ -22,6 +22,7 @@ import FormTextarea from "@/components/form/textarea";
 import FormNumberInput from "@/components/form/number-input";
 import FormCombobox from "@/components/form/combobox";
 import FormImageDrop from "@/components/form/image-drop";
+import { useTranslation } from "react-i18next";
 
 interface thisProps {
     open: boolean;
@@ -35,12 +36,13 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
     const { data: vendors } = useGet<Category[]>("vendor/");
     const { data: category } = useGet<Category[]>("category/");
     const { name } = useLanguage();
+    const { t } = useTranslation();
+
     const { post, patch, isPending } = useRequest({
         onSuccess: (data) => {
             if (current?.id) {
                 queryClient.setQueryData(["product/"], (oldData: any) => {
                     if (!oldData) return oldData;
-
                     return {
                         ...oldData,
                         pages: oldData.pages.map((page: { results: any[]; }) => ({
@@ -93,7 +95,7 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
                 image3: typeof data.image3 === "string" ? undefined : data.image3,
                 image4: typeof data.image4 === "string" ? undefined : data.image4,
             });
-            toast.success("Muvaffaqiyatli tahrirlandi");
+            toast.success(`${t("Muvaffaqiyatli tahrirlandi")}`);
             setOpen(false);
             form.reset();
         } else {
@@ -101,7 +103,7 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
                 ...data,
                 discounted_price: data.discounted_price || undefined,
             });
-            toast.success("Muvaffaqiyatli qo'shildi");
+            toast.success(`${t("Muvaffaqiyatli qo'shildi")}`);
             setOpen(false);
             form.reset();
         }
@@ -154,7 +156,7 @@ export default function ControlProduct({ open, setOpen, current }: thisProps) {
                         <FormImageDrop methods={form} name="image4" label="Rasm" />
                     </div>
                     <Button icon={current?.id ? <Edit2 width={18} /> : <Plus width={18} />} type="submit" loading={isPending} className="w-max ml-auto">
-                        {current?.id ? "Tahrirlash" : "Qo'shish"}
+                        {current?.id ? t("Tahrirlash") : t("Qo'shish")}
                     </Button>
                 </form>
             </DialogContent>

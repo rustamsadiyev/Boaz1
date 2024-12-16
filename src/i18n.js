@@ -10,7 +10,7 @@ i18n
   .use(languageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: "uz",  // Default language if one is not found
+    fallbackLng: "afg",  // Default language if one is not found
     lng: "uz",  // Default language set to 'uz'
     debug: true,
     resources: {

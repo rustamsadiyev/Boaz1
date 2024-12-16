@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-
+import { useTranslation } from "react-i18next";
 export const useColumns = ({
   onEdit,
 }: {
@@ -14,18 +14,20 @@ export const useColumns = ({
   const queryClient = useQueryClient();
   const confirm = useConfirm();
 
+  const { t } = useTranslation();
+
   async function onDelete(id: number) {
     const isConfirmed = await confirm({
-      title: "O'chirilsinmi?",
+      title: `${t("O'chirilsinmi")}?`,
     });
     if (isConfirmed) {
       toast.promise(http.delete("category/" + id + "/"), {
-        loading: "O'chirilmoqda",
+        loading: `${t("O'chirilmoqda")}`,
         success: () => {
           queryClient.setQueryData(["category/"], (oldData: Category[]) =>
             oldData?.filter((f) => f.id !== id)
           );
-          return "Muvaffaqiyatli o'chirildi";
+          return `${t("muvaffaqiyatli o'chirildi")}`;
         },
       });
     }
@@ -33,14 +35,14 @@ export const useColumns = ({
 
   return [
     {
-      id: "index", // Added id for this column
+      id: "index",
       header: () => <div className="text-center">№</div>,
       cell: ({ row }) => (
         <div className="text-center">{row.index + 1}</div>
       ),
     },
     {
-      id: "name_uz", // Added id for name_uz
+      id: "name_uz",
       header: () => <div className="text-center">Nomi (Uzbek)</div>,
       accessorKey: "name_uz",
       cell: ({ row }) => (
@@ -48,7 +50,7 @@ export const useColumns = ({
       ),
     },
     {
-      id: "name_fa", // Added id for name_fa
+      id: "name_fa",
       header: () => <div className="text-center">Nomi (Russian)</div>,
       accessorKey: "name_fa",
       cell: ({ row }) => (
@@ -56,7 +58,7 @@ export const useColumns = ({
       ),
     },
     {
-      id: "actions", // Added id for this column
+      id: "actions",
       header: () => <div className="text-center"> </div>,
       cell: ({ row }) => (
         <div className="flex justify-center items-center space-x-2">

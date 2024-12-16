@@ -3,6 +3,7 @@ import { useState } from "react";
 import http from "@/lib/http";
 import { AxiosRequestConfig, AxiosProgressEvent } from "axios";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 type RequestType = "post" | "put" | "delete" | "patch";
 type ContentType = "application/json" | "multipart/form-data" | "blob";
@@ -34,7 +35,7 @@ export function useRequest<T = any>(
 ) {
     const { contentType = "application/json" } = config;
     const [uploadProgress, setUploadProgress] = useState(0);
-
+    const {t} = useTranslation();
     const mutationFn = async ({
         method,
         url,
@@ -71,7 +72,7 @@ export function useRequest<T = any>(
                 toast.error(
                     error?.response?.data?.[
                         Object.keys(error?.response?.data)?.[0]
-                    ] || "Xatolik yuz berdi"
+                    ] || `${t("Xatolik yuz berdi")}`
                 );
             }
         },

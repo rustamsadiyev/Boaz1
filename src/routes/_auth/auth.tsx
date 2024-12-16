@@ -15,13 +15,13 @@ import axios from "axios";
 import ParamAnimatedTabs from "@/components/param/animated-tab";
 import { useUser } from "@/constants/useUser";
 import FormCheckbox from "@/components/form/checkbox";
-
+import { useTranslation } from "react-i18next";
 export const Route = createFileRoute("/_auth/auth")({
   component: AuthComponent,
 });
 
 function AuthComponent() {
-  
+  const { t }  = useTranslation();
   const [loading, setLoading] = useState(false);
   const search: any = useSearch({ from: "/_auth/auth" });
   const LastSchema = search.page_tabs === "register" ? FormSchema2 : FormSchema;
@@ -65,8 +65,8 @@ function AuthComponent() {
       toast.error(
         error.response?.data?.detail ||
         (search.page_tabs === "register"
-          ? "Bunday user mavjud"
-          : "Bunday user mavjud emas")
+          ? `${t("Bunday user mavjud")}`
+          : `${t("Bunday user mavjud emas")}`)
       );
     } finally {
       setLoading(false);
@@ -84,21 +84,21 @@ function AuthComponent() {
         onValueChange={() => form.reset()}
         options={[
           {
-            name: "Kirish",
+            name: `${t("kirish")}`,
             id: "login",
             content: (
               <Card className="w-full sm:max-w-sm overflow-y-hidden ">
                 <CardHeader>
                   <CardTitle className="text-lg sm:text-2xl text-center">
-                    Kirish
+                    {t("kirish")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6 pt-0">
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormInput name="username" label="Login" methods={form} />
-                    <FormInput name="password" label="Parol" type="password" methods={form} />
+                    <FormInput name="username" label={t("Login")} methods={form} />
+                    <FormInput name="password" label={t("Parol")} type="password" methods={form} />
                     <Button type="submit" loading={loading} className="w-full">
-                      Kirish
+                      {t("kirish")}
                     </Button>
                   </form>
                 </CardContent>
@@ -106,24 +106,24 @@ function AuthComponent() {
             ),
           },
           {
-            name: "Ro'yxatdan o'tish",
+            name: `${t("Ro'yxatdan o'tish")}`,
             id: "register",
             content: (
               <Card className="w-full sm:max-w-sm overflow-y-hidden ">
                 <CardHeader>
                   <CardTitle className="text-lg sm:text-2xl text-center">
-                    Ro'yxatdan o'tish
+                    {t("Ro'yxatdan o'tish")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6 ">
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormInput methods={form} name="full_name" label="To'liq ismi" />
-                    <FormInput name="username" label="Login" methods={form} />
-                    <FormInput name="password" label="Parol" type="password" methods={form} />
-                    <FormInput name="retype" label="Parolni qayta kiriting" type="password" methods={form} />
-                    <FormCheckbox methods={form} name="is_best_client" label="Ulgurji User"  onChange={(e) => setIsBestClient(e.target.checked)}  />
+                    <FormInput methods={form} name="full_name" label={t("To'liq ismi")} />
+                    <FormInput name="username" label={t("Login")} methods={form} />
+                    <FormInput name="password" label={t("Parol")} type="password" methods={form} />
+                    <FormInput name="retype" label={t("Parolni qayta kiriting")} type="password" methods={form} />
+                    <FormCheckbox methods={form} name="is_best_client" label={t("Ulgurji user")}  onChange={(e) => setIsBestClient(e.target.checked)}  />
                     <Button type="submit" loading={loading} className="w-full">
-                      Ro'yxatdan o'tish
+                      {t("Ro'yxatdan o'tish")}
                     </Button>
                   </form>
                 </CardContent>
@@ -138,22 +138,22 @@ function AuthComponent() {
 }
 
 const FormSchema = z.object({
-  username: z.string().min(1, "Loginingizni kiriting"),
-  password: z.string().min(1, "Parolingizni kiriting"),
+  username: z.string().min(1, "نام کاربری خود را وارد کنید"),
+  password: z.string().min(1, "رمز عبور خود را وارد کنید"),
   is_best_client: z.boolean().optional().default(false)
 });
 
 const FormSchema2 = z.object({
-  full_name: z.string().min(1, "Ismingizni kiriting"),
-  username: z.string().min(1, "Loginingizni kiriting"),
-  password: z.string().min(1, "Parolingizni kiriting"),
-  retype: z.string().min(1, "Parolingizni qayta kiriting"),
+  full_name: z.string().min(1, "نام خود را وارد کنید"),
+  username: z.string().min(1, "نام کاربری خود را وارد کنید"),
+  password: z.string().min(1, "رمز عبور خود را وارد کنید"),
+  retype: z.string().min(1, "رمز عبور خود را دوباره وارد کنید"),
   is_best_client: z.boolean().optional().default(false)
 }).superRefine(({ password, retype }, ctx) => {
   if (password !== retype) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: "Parolingiz mos kelmadi",
+      message: "رمز عبور شما مطابقت ندارد",
       path: ["retype"],
     });
   }

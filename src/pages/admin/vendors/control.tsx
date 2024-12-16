@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-
+import { useTranslation } from "react-i18next";
 const ControlName = ({
     open,
     setOpen,
@@ -26,20 +26,20 @@ const ControlName = ({
     current: Category | undefined;
 }) => {
     const queryClient = useQueryClient();
-
+    const { t } = useTranslation();
     const { post, patch, isPending } = useRequest({
         onSuccess: (res: any) => {
             if (current?.id) {
                 queryClient.setQueryData(["vendor/"], (oldData: Category[]) =>
                     oldData?.map((o) => (o.id == current?.id ? res : o))
                 );
-                toast.success("Muvaffaqiyatli tahrirlandi");
+                toast.success(`${t("Muvaffaqiyatli tahrirlandi")}`);
             } else {
                 queryClient.setQueryData(["vendor/"], (oldData: Category[]) => [
                     ...oldData,
                     res,
                 ]);
-                toast.success("Muvaffaqiyatli tahrirlandi");
+                toast.success(`${t("Muvaffaqiyatli qo'shildi")}`);
             }
             setOpen(false);
         },
@@ -94,14 +94,14 @@ const ControlName = ({
                     <FormInput methods={form} name="name_fa" label="Nomi (Dari)" />
                     <FormInput methods={form} name="name_uz" label="Nomi (Uzbek)" />
                     <div className="flex gap-4 justify-end">
-                        <Button loading={isPending}>Saqlash</Button>
+                        <Button loading={isPending}>{t("Saqlash")}</Button>
                         <Button
                             type="button"
                             variant="secondary"
                             onClick={() => setOpen(false)}
                             disabled={isPending}
                         >
-                            Bekor qilish
+                        {t("Bekor qilish")}
                         </Button>
                     </div>
                 </form>

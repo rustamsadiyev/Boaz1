@@ -20,7 +20,7 @@ export default function Basket() {
     await post("order/",store?.map((p) => ({ product: p.id, quantity: p.count })) || []
     )
     setStore([]);
-    toast.success("Buyurtma amalga oshirildi");
+    toast.success(`${t("Muvaffaqiyatli amalga oshirildi")}`);
   };
 
   return (

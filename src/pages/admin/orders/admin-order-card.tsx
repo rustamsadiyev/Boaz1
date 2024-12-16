@@ -52,15 +52,14 @@ export default function AdminOrderCard({
 
     const { name } = useLanguage(); // Get the current language from the context
 
-    // Function to change order status
     async function changeStatus(status: number) {
         const isConfirmed =
             status === 3 || status === 4
                 ? await confirm({
                       title:
                           status === 3
-                              ? "Buyurtmani bekor qilinsinmi"
-                              : "Buyurtmani tasdiqlansinmi?",
+                              ? `${t("Buyurtmani bekor qilinsinmi")}`
+                              : `${t("Buyurtmani tasdiqlansinmi")}`,
                   })
                 : true;
 
@@ -68,19 +67,18 @@ export default function AdminOrderCard({
             toast.promise(
                 patch(`order/${p.id}/`, { ...search, status: undefined }),
                 {
-                    loading: "O'zgartirilmoqda...",
+                    loading: `${t("O'zgartirilmoqda...")}`,
                     success: () => {
                         queryClient.invalidateQueries({
                             queryKey: ["order/?pending=true", search],
                         });
-                        return "Muvaffaqiyatli o'zgartirildi";
+                        return `${t("Muvaffaqiyatli o'zgartirildi")}`;
                     },
                 }
             );
         }
     }
 
-    // Language-based mapping for order status
     const statuses = {
         0: `${t("To'lov qilinmagan")}`,
         3: `${t("Bekor qilingan")}`,

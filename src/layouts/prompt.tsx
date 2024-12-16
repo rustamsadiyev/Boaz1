@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
+import { useTranslation } from "react-i18next";
 interface PromptContextProps {
   prompt: (title?: string) => Promise<string | null>;
 }
@@ -29,7 +29,7 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
   >(() => {});
   const [dialogTitle, setDialogTitle] = useState<string | undefined>("");
   const [inputValue, setInputValue] = useState("");
-
+  const { t } = useTranslation();
   const prompt = (title?: string) => {
     setDialogTitle(title);
     setIsOpen(true);
@@ -44,7 +44,7 @@ export const PromptProvider: React.FC<{ children: ReactNode }> = ({
       resolvePromise(inputValue);
       setInputValue("");
     } else {
-      toast.error((dialogTitle || "Sabab") + " kiriting");
+      toast.error((dialogTitle || `${t("Sabab")}`) + " kiriting");
     }
   };
 

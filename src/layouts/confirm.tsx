@@ -8,7 +8,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { createContext, useState, ReactNode, KeyboardEvent } from "react";
-
+import { useTranslation } from "react-i18next";
 interface ConfirmContextProps {
   confirm: (options: UseConfirmProps) => Promise<boolean>;
 }
@@ -30,7 +30,7 @@ export const ConfirmProvider: React.FC<{ children: ReactNode }> = ({
     (value: boolean) => void
   >(() => {});
   const [dialogProps, setDialogProps] = useState<UseConfirmProps>({});
-
+  const { t } = useTranslation();
   const confirm = (options: UseConfirmProps) => {
     setDialogProps(options);
     setIsOpen(true);
@@ -62,17 +62,17 @@ export const ConfirmProvider: React.FC<{ children: ReactNode }> = ({
       <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
         <AlertDialogContent onKeyDown={handleKeyDown}>
           <AlertDialogTitle>
-            {dialogProps.title || "Tasdiqlash"}
+            {dialogProps.title || t("Tasdiqlash")}
           </AlertDialogTitle>
           <AlertDialogDescription>
             {dialogProps.description}
           </AlertDialogDescription>
           <AlertDialogFooter className="!flex !flex-row items-center gap-4">
             <AlertDialogCancel onClick={handleCancel} className="m-0 w-full">
-              Bekor qilish
+              {t("Bekor qilish")}
             </AlertDialogCancel>
             <AlertDialogAction onClick={handleConfirm} className="w-full">
-              Tasdiqlash
+              {t("Tasdiqlash")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

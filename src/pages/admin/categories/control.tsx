@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useTranslation } from "react-i18next";
 
 const ControlName = ({
   open,
@@ -26,7 +27,7 @@ const ControlName = ({
   current: Category | undefined;
 }) => {
   const queryClient = useQueryClient();
-
+  const { t } = useTranslation();
   const { post, patch, isPending } = useRequest({
     onSuccess: (res: any) => {
       if (current?.id) {
@@ -35,13 +36,13 @@ const ControlName = ({
           (oldData: Category[]) =>
             oldData?.map((o) => (o.id == current?.id ? res : o))
         );
-        toast.success("Muvaffaqiyatli tahrirlandi");
+        toast.success(`${t("Muvaffaqiyatli tahrirlandi")}`);
       } else {
         queryClient.setQueryData(
           ["category/"],
           (oldData: Category[]) => [...oldData, res]
         );
-        toast.success("Muvaffaqiyatli tahrirlandi");
+        toast.success(`${t("Muvaffaqiyatli tahrirlandi")}`);
       }
       setOpen(false);
     },
@@ -81,10 +82,10 @@ const ControlName = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>{current?.id ? "Tahrirlash" : "Qo'shish"}</DialogTitle>
+          <DialogTitle>{current?.id ? `${t("Tahrirlash")}` : `${t("qo'shish")}`}</DialogTitle>
           <VisuallyHidden>
             <DialogDescription>
-              {current?.id ? "Tahrirlash" : "Qo'shish"}
+              {current?.id ? `${t("Tahrirlash")}` : `${t("qo'shish")}`}
             </DialogDescription>
           </VisuallyHidden>
         </DialogHeader>
@@ -102,7 +103,7 @@ const ControlName = ({
               onClick={() => setOpen(false)}
               disabled={isPending}
             >
-              Bekor qilish
+              {t("Bekor qilish")}
             </Button>
           </div>
         </form>

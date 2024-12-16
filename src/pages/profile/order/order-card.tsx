@@ -14,7 +14,6 @@ import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
 import { toast } from "sonner";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
-
 export default function OrderCard({
     p,
 }: {
@@ -39,16 +38,16 @@ export default function OrderCard({
 
     async function handleCancel(id: number) {
         const isConfirmed = await confirm({
-            title: "Buyurtmani bekor qilinsinmi?",
+            title: `${t("Buyurtmani bekor qilinsinmi?")}`,
         });
         if (isConfirmed) {
             toast.promise(patch(`order/${id}/`, { status: 3 }), {
-                loading: "O'zgartirilmoqda...",
+                loading: `${t("O'zgartirilmoqda...")}`,
                 success: () => {
                     queryClient.invalidateQueries({
                         queryKey: ["order/", search],
                     });
-                    return "Muvaffaqiyatli bekor qilindi";
+                    return `${t("Muvaffaqiyatli bekor qilindi")}`;
                 },
             });
         }

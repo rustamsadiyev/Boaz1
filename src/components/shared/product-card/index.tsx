@@ -74,12 +74,12 @@ export default function ProductCard({
                             ),
                         })
                     );
-                    return p.name + " sevimlilardan olib tashlandi";
+                    return p.name + `${t("sevimlilardan olib tashlandi")}`;
                 },
             });
         } else {
             toast.promise(post("user/favourite/", { product_id: p.id }), {
-                loading: "Sevimlilarga qo'shilmoqda...",
+                loading: `${t("Sevimlilarga qo'shilmoqda...")}`,
                 success: () => {
                     queryClient.setQueryData(
                         ["user/favourite/"],
@@ -94,7 +94,7 @@ export default function ProductCard({
                             ],
                         })
                     );
-                    return p.name + " sevimlilarga qo'shildi";
+                    return p.name + `${t("sevimlilarga qo'shildi")}`;
                 },
             });
         }
@@ -108,10 +108,9 @@ export default function ProductCard({
             : [...(baskets.store || []), { ...p, count: 1 }];
 
         baskets.setStore(updatedBaskets || []);
-        !isInBasket && toast.success(p.name + " savatchaga qo'shildi");
+        !isInBasket && toast.success(p.name + `${t("savatchaga qo'shildi")}`);
     };
 
-    // Determine which name and description to show based on the selected language
     const productName = selectedLanguage === "name_uz" ? p.name_uz : p.name_fa;
     const productDescription =
         selectedLanguage === "name_uz" ? p.description_uz : p.description_fa;
@@ -176,9 +175,9 @@ export default function ProductCard({
                             {productDescription}
                         </p>
                         <p className="text-xs sm:text-sm text-muted-foreground pt-2">
-                            Omborda:{" "}
+                            {t("Omborda")}:{" "}
                             <span className="text-foreground font-medium">
-                                {p.stock} ta
+                                {p.stock} {t("ta")}
                             </span>
                         </p>
                     </Link>

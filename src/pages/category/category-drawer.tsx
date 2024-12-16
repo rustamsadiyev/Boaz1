@@ -10,27 +10,28 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import Filter from "./filter"
-
+import { useTranslation } from "react-i18next";
 
 export function CategoryDrawer() {
+  const { t } = useTranslation();
   return (
     <Drawer>
       <DrawerTrigger asChild className="md:hidden">
         <Button variant='secondary'>
-        Filtr
+        {t("Filter")}
         </Button>
       </DrawerTrigger>
       <DrawerContent className="h-screen p-2">
         <DrawerHeader className="flex items-center justify-between p-0">
-            <DrawerTitle>Filter</DrawerTitle>
+            <DrawerTitle>{t("Filter")}</DrawerTitle>
             <DrawerClose asChild className="-mr-2">
-              <Button variant="link">Bekor qilish</Button>
+              <Button variant="link">{t("Bekor qilish")}</Button>
             </DrawerClose>
         </DrawerHeader>
         <Filter/>
         <DrawerFooter className="p-0">
             <DrawerClose asChild>
-              <Button>Ko'rsatish</Button>
+              <Button>{t("Ko'rsatish")}</Button>
             </DrawerClose>
           </DrawerFooter>
       </DrawerContent>

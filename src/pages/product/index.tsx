@@ -17,7 +17,7 @@ import { ShoppingCart } from "lucide-react";
 import { useStore } from "@/hooks/useStore";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-import { useLanguage } from "@/components/custom/languageContext"; // Assuming you have a useLanguage hook or context
+import { useLanguage } from "@/components/custom/languageContext";
 
 export default function Product() {
     const params = useParams({ from: "/_main/products/$product" });
@@ -26,7 +26,7 @@ export default function Product() {
     const { data: d, isLoading } = useGet<Product>(`product/` + params.product + "/");
     const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
-    const { name } = useLanguage(); // Assuming `useLanguage` returns the current language (either 'uz' or 'fa')
+    const { name } = useLanguage();
 
     const isInBasket = useMemo(() => {
         return store?.some((b) => b.id === d?.id);
@@ -40,10 +40,9 @@ export default function Product() {
             : [...(store || []), { ...d, count: 1 }];
 
         setStore(updatedBaskets || []);
-        !isInBasket && toast.success(d?.name_uz + " savatchaga qo'shildi");
+        !isInBasket && toast.success(d?.name_uz + `${"savatchaga qo'shildi"}`);
     };
 
-    // Conditionally rendering name and description based on selected language
     const productName = name === 'name_uz' ? d?.name_uz : d?.name_fa;
     const productDescription = name === 'name_fa' ? d?.description_uz : d?.description_fa;
 

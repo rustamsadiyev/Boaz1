@@ -15,8 +15,8 @@ import Fade from "embla-carousel-fade";
 import { Edit2, Trash2 } from "lucide-react";
 import { useRef } from "react";
 import { toast } from "sonner";
-import { useLanguage } from "@/components/custom/languageContext"; // Import the useLanguage hook
-
+import { useLanguage } from "@/components/custom/languageContext";
+import { useTranslation } from "react-i18next";
 export default function AdminProductCard({
     p,
     onEdit,
@@ -32,7 +32,9 @@ export default function AdminProductCard({
     const { remove, isPending } = useRequest();
     const queryClient = useQueryClient();
 
-    const { name } = useLanguage(); // Get the current selected language from context
+    const { name } = useLanguage();
+
+    const { t } = useTranslation();
 
     async function deleteProduct() {
         const isConfirmed = await confirm({
@@ -40,7 +42,7 @@ export default function AdminProductCard({
         });
         if (isConfirmed) {
             toast.promise(remove("product/" + p.id + "/"), {
-                loading: "O'chirilmoqda...",
+                loading: `${t("O'chirilmoqda")}`,
                 success: () => {
                     queryClient.setQueryData(
                         ["product/"],
@@ -68,7 +70,7 @@ export default function AdminProductCard({
                         }
                     );
 
-                    return p.name + " muvaffaqiyatli o'chirildi";
+                    return p.name + `${t("Muvaffaqiyatli o'chirildi")}`;
                 },
             });
         }
@@ -100,11 +102,11 @@ export default function AdminProductCard({
                 </Carousel>
                 <div className="p-3">
                     <h2 className="text-sm sm:text-base font-medium">
-                        {/* Dynamically display product name based on language */}
+
                         {name === "name_uz" ? p.name_uz : name === "name_fa" ? p.name_fa : p.name_uz}
                     </h2>
                     <p className="text-xs sm:text-sm text-muted-foreground">
-                        {/* Dynamically display product description based on language */}
+
                         {name === "name_uz" ? p.description_uz : name === "name_fa" ? p.description_fa : p.description_uz}
                     </p>
                     <p className="text-xs sm:text-sm text-muted-foreground pt-2">

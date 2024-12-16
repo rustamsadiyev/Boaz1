@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 const LanguageContext = createContext<{
@@ -8,14 +8,16 @@ const LanguageContext = createContext<{
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { i18n } = useTranslation();
-  const [name, setName] = useState("name_fa"); // Default language
+  const [name, setName] = useState("name_fa");
+
+  const contextValue = useMemo(() => ({ name, setName }), [name]);
 
   useEffect(() => {
     i18n.changeLanguage(name);
   }, [name, i18n]);
 
   return (
-    <LanguageContext.Provider value={{ name, setName }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
