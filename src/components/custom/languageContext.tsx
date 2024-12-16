@@ -10,9 +10,9 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const { i18n } = useTranslation();
   const [name, setName] = useState("name_fa"); // Default language
 
-//   useEffect(() => {
-//     i18n.changeLanguage(name);
-//   }, [name, i18n]);
+  useEffect(() => {
+    i18n.changeLanguage(name);
+  }, [name, i18n]);
 
   return (
     <LanguageContext.Provider value={{ name, setName }}>
